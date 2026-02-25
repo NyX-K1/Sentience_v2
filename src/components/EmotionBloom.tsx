@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
-import { EmotionFamily } from '../types/mood';
+import { EmotionFamily, EmotionDef } from '../types/mood';
 import { emotions as allEmotions } from '../data/emotions';
+import { useState } from 'react';
+import EmotionTooltip from './EmotionTooltip';
 
 interface EmotionBloomProps {
     family: EmotionFamily | null;
@@ -11,7 +13,7 @@ interface EmotionBloomProps {
 }
 
 export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmotion, onBack, onProceed }: EmotionBloomProps) {
-    if (!family) return null;
+    const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
 
     // Filter taxonomy by family or just dump all if 'Complex'
     // Right now we only have a tiny subset in emotions.ts, so we filter safely
@@ -50,6 +52,8 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                                 whileHover={{ scale: 1.02, x: 8 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => onToggleEmotion(em.id)}
+                                onMouseEnter={() => setHoveredEmotion(em)}
+                                onMouseLeave={() => setHoveredEmotion(null)}
                                 className={`
                                     w-full text-left px-6 py-4 rounded-2xl transition-all duration-300 font-medium tracking-wide flex items-center justify-between group
                                     ${isSelected
@@ -72,6 +76,9 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                     })}
                 </div>
             </div>
+
+            {/* Floating Tooltip Component */}
+            {hoveredEmotion && <EmotionTooltip emotion={hoveredEmotion} />}
 
             {/* Action Bar - Fixed to bottom */}
             <motion.div
