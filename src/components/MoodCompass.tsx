@@ -56,7 +56,6 @@ export default function MoodCompass({ selectedQuadrant, onSelectQuadrant }: Mood
                     <motion.div
                         key={q.id}
                         className={`w-1/2 h-1/2 relative group cursor-pointer overflow-hidden p-6 flex flex-col items-center justify-center text-center`}
-                        whileHover={{ scale: 1.05, zIndex: 10 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => onSelectQuadrant(q.id)}
                     >
