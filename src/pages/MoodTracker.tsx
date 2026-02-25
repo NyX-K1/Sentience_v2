@@ -5,6 +5,10 @@ import EmotionWheel from '../components/EmotionWheel';
 import EmotionBloom from '../components/EmotionBloom';
 import ContextPanel from '../components/ContextPanel';
 import BackgroundShader from '../components/BackgroundShader';
+import MoodTimeline from '../components/MoodTimeline';
+import FamilyDistribution from '../components/FamilyDistribution';
+import EmotionHeatmap from '../components/EmotionHeatmap';
+import TriggerCorrelation from '../components/TriggerCorrelation';
 import { EmotionFamily } from '../types/mood';
 
 
@@ -18,7 +22,7 @@ const MoodTracker = () => {
     const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
     const [showContext, setShowContext] = useState(false);
 
-    const { addEntry } = useMoodStore();
+    const { entries, addEntry } = useMoodStore();
 
     const handleToggleEmotion = (id: string) => {
         setSelectedEmotions(prev =>
@@ -117,8 +121,22 @@ const MoodTracker = () => {
                     )}
 
                     {activeTab === 'trends' && (
-                        <div className="w-full flex-col flex items-center justify-center min-h-[60vh] opacity-50">
-                            <p className="text-xl font-light tracking-widest">[ Trends Data Visualization UI pending ]</p>
+                        <div className="w-full max-w-5xl mx-auto px-4 lg:px-0 flex flex-col gap-6 pt-4">
+                            {/* Top Row: Temporal */}
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2">
+                                    <MoodTimeline entries={entries} />
+                                </div>
+                                <div className="lg:col-span-1">
+                                    <FamilyDistribution entries={entries} />
+                                </div>
+                            </div>
+
+                            {/* Bottom Row: Categorical / Drill-down */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <EmotionHeatmap entries={entries} />
+                                <TriggerCorrelation entries={entries} />
+                            </div>
                         </div>
                     )}
 
