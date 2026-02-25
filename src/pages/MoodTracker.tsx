@@ -9,7 +9,12 @@ import MoodTimeline from '../components/MoodTimeline';
 import FamilyDistribution from '../components/FamilyDistribution';
 import EmotionHeatmap from '../components/EmotionHeatmap';
 import TriggerCorrelation from '../components/TriggerCorrelation';
+import InsightCard from '../components/InsightCard';
+import CrisisCard from '../components/CrisisCard';
+import VocabularyTracker from '../components/VocabularyTracker';
+import { usePatternDetection } from '../hooks/usePatternDetection';
 import { EmotionFamily } from '../types/mood';
+import { HeartHandshake } from 'lucide-react';
 
 
 
@@ -21,8 +26,10 @@ const MoodTracker = () => {
     const [family, setFamily] = useState<EmotionFamily | null>(null);
     const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
     const [showContext, setShowContext] = useState(false);
+    const [forceShowCrisis, setForceShowCrisis] = useState(false);
 
     const { entries, addEntry } = useMoodStore();
+    const insights = usePatternDetection(entries);
 
     const handleToggleEmotion = (id: string) => {
         setSelectedEmotions(prev =>
@@ -141,12 +148,60 @@ const MoodTracker = () => {
                     )}
 
                     {activeTab === 'patterns' && (
-                        <div className="w-full flex-col flex items-center justify-center min-h-[60vh] opacity-50">
-                            <p className="text-xl font-light tracking-widest">[ Insight & Nudge UI pending ]</p>
+                        <div className="w-full max-w-5xl mx-auto px-4 lg:px-0 flex flex-col gap-6 pt-4">
+
+                            {/* Priority Crisis Intervention (if triggered or forced) */}
+                            {(forceShowCrisis || insights.some(i => i.tier === 'crisis')) && (
+                                <div className="mb-4">
+                                    <CrisisCard />
+                                </div>
+                            )}
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                                {/* 2/3 Width - Insights Stream */}
+                                <div className="lg:col-span-2 flex flex-col gap-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <h3 className="text-xl font-light tracking-wide">Sentience Insights</h3>
+                                        <span className="text-xs text-white/40 uppercase tracking-widest">{insights.length} active patterns</span>
+                                    </div>
+
+                                    {insights.length === 0 ? (
+                                        <div className="w-full h-40 flex items-center justify-center border border-white/10 rounded-3xl bg-white/5">
+                                            <p className="text-white/40 text-sm tracking-widest uppercase text-center px-4">
+                                                Log consistently to unlock psychological patterns.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        insights.filter(i => i.tier !== 'crisis').map((insight, index) => (
+                                            <InsightCard key={insight.id} index={index} insight={insight} />
+                                        ))
+                                    )}
+                                </div>
+
+                                {/* 1/3 Width - Growth & Tooling */}
+                                <div className="lg:col-span-1">
+                                    <VocabularyTracker entries={entries} />
+                                </div>
+
+                            </div>
                         </div>
                     )}
                 </main>
             </div>
+
+            {/* Global Permanent Distress Button */}
+            {!forceShowCrisis && (
+                <button
+                    onClick={() => setForceShowCrisis(true)}
+                    className="fixed bottom-6 right-6 z-50 bg-black/60 hover:bg-red-500/20 text-white/50 hover:text-red-400 border border-white/10 hover:border-red-500/30 rounded-full p-4 transition-all shadow-lg backdrop-blur-xl group"
+                >
+                    <HeartHandshake size={24} />
+                    <span className="absolute right-16 top-1/2 -translate-y-1/2 bg-black border border-white/10 text-white text-xs py-1.5 px-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                        Get Support Right Now
+                    </span>
+                </button>
+            )}
         </div>
     );
 };
