@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
-import { EmotionFamily, EmotionDef } from '../types/mood';
+import { EmotionFamily } from '../types/mood';
 import { emotions as allEmotions } from '../data/emotions';
-import { useState } from 'react';
-import EmotionTooltip from './EmotionTooltip';
 
 interface EmotionBloomProps {
     family: EmotionFamily | null;
@@ -13,8 +11,6 @@ interface EmotionBloomProps {
 }
 
 export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmotion, onBack, onProceed }: EmotionBloomProps) {
-    const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
-
     if (!family) return null;
 
     // Filter taxonomy by family or just dump all if 'Complex'
@@ -51,10 +47,9 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                                 key={em.id}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0, transition: { delay: i * 0.03 } }}
+                                whileHover={{ scale: 1.02, x: 8 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => onToggleEmotion(em.id)}
-                                onMouseEnter={() => setHoveredEmotion(em)}
-                                onMouseLeave={() => setHoveredEmotion(null)}
                                 className={`
                                     w-full text-left px-6 py-4 rounded-2xl transition-all duration-300 font-medium tracking-wide flex items-center justify-between group
                                     ${isSelected
@@ -65,7 +60,9 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                                 <div>
                                     <span className={`text-lg block ${isSelected ? 'text-black font-semibold' : 'text-white'}`}>{em.label}</span>
                                     {em.intensity === 4 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-rose-400'}`}>Extreme Intensity</span>}
-                                    {em.intensity === 1 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-white/30'}`}>Mild</span>}
+                                    {em.intensity === 3 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-orange-300'}`}>Strong</span>}
+                                    {em.intensity === 2 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-amber-200'}`}>Moderate</span>}
+                                    {em.intensity === 1 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-white/40'}`}>Mild</span>}
                                 </div>
                                 <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black text-white' : 'border-white/20 text-transparent group-hover:border-white/40'}`}>
                                     {isSelected && <span className="text-sm">✓</span>}
@@ -75,9 +72,6 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                     })}
                 </div>
             </div>
-
-            {/* Floating Tooltip Component */}
-            {hoveredEmotion && <EmotionTooltip emotion={hoveredEmotion} />}
 
             {/* Action Bar - Fixed to bottom */}
             <motion.div
