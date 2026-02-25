@@ -16,11 +16,9 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
     const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
 
     // Filter taxonomy by family or just dump all if 'Complex'
-    // Right now we only have a tiny subset in emotions.ts, so we filter safely
     const relevantEmotions = allEmotions.filter(e => e.family === family || (family === 'Complex' && e.family === 'Complex'));
 
-    // Sort by intensity descending (center out)
-    const sorted = [...relevantEmotions].sort((a, b) => b.intensity - a.intensity);
+    const [expandedIntensity, setExpandedIntensity] = useState<number | null>(4);
 
     return (
         <motion.div
@@ -40,38 +38,69 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
 
             {/* Scrollable List Container */}
             <div className="w-full max-w-xl flex-grow overflow-y-auto scrollbar-hide px-4 pb-32 relative">
-                <div className="flex flex-col gap-3">
-                    {sorted.map((em, i) => {
-                        const isSelected = selectedEmotionIds.includes(em.id);
+                <div className="flex flex-col gap-4">
+                    {[4, 3, 2, 1].map((intensity) => {
+                        const items = relevantEmotions.filter(e => e.intensity === intensity);
+                        if (items.length === 0) return null;
+
+                        const isExpanded = expandedIntensity === intensity;
+                        const headerLabels = {
+                            4: "Peak Intensity",
+                            3: "Strong Intensity",
+                            2: "Moderate Intensity",
+                            1: "Mild Intensity"
+                        };
 
                         return (
-                            <motion.button
-                                key={em.id}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0, transition: { delay: i * 0.03 } }}
-                                whileHover={{ scale: 1.02, x: 8 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => onToggleEmotion(em.id)}
-                                onMouseEnter={() => setHoveredEmotion(em)}
-                                onMouseLeave={() => setHoveredEmotion(null)}
-                                className={`
-                                    w-full text-left px-6 py-4 rounded-2xl transition-all duration-300 font-medium tracking-wide flex items-center justify-between group
-                                    ${isSelected
-                                        ? 'bg-gradient-to-r from-white to-zinc-200 text-black shadow-lg shadow-white/10'
-                                        : 'bg-white/5 text-white/80 hover:bg-white/10 border border-white/5 hover:border-white/20'}
-                                `}
-                            >
-                                <div>
-                                    <span className={`text-lg block ${isSelected ? 'text-black font-semibold' : 'text-white'}`}>{em.label}</span>
-                                    {em.intensity === 4 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-rose-400'}`}>Extreme Intensity</span>}
-                                    {em.intensity === 3 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-orange-300'}`}>Strong</span>}
-                                    {em.intensity === 2 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-amber-200'}`}>Moderate</span>}
-                                    {em.intensity === 1 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-white/40'}`}>Mild</span>}
-                                </div>
-                                <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black text-white' : 'border-white/20 text-transparent group-hover:border-white/40'}`}>
-                                    {isSelected && <span className="text-sm">✓</span>}
-                                </div>
-                            </motion.button>
+                            <div key={intensity} className="flex flex-col gap-2">
+                                <button
+                                    onClick={() => setExpandedIntensity(isExpanded ? null : intensity)}
+                                    className={`w-full text-left px-5 py-4 rounded-xl transition-colors flex justify-between items-center border ${isExpanded ? 'bg-white/10 border-white/20' : 'bg-white/5 hover:bg-white/10 border-white/5'}`}
+                                >
+                                    <span className="font-semibold text-white/90 tracking-widest uppercase text-sm">
+                                        {headerLabels[intensity as keyof typeof headerLabels]} <span className="text-white/40 ml-2">({items.length})</span>
+                                    </span>
+                                    <span className="text-white/50 text-xl font-light leading-none">
+                                        {isExpanded ? '−' : '+'}
+                                    </span>
+                                </button>
+
+                                {isExpanded && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="flex flex-col gap-2 pl-3 ml-2 border-l-2 border-white/10 mt-1 mb-2"
+                                    >
+                                        {items.map((em, i) => {
+                                            const isSelected = selectedEmotionIds.includes(em.id);
+
+                                            return (
+                                                <motion.button
+                                                    key={em.id}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0, transition: { delay: i * 0.02 } }}
+                                                    whileHover={{ scale: 1.02, x: 4 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => onToggleEmotion(em.id)}
+                                                    onMouseEnter={() => setHoveredEmotion(em)}
+                                                    onMouseLeave={() => setHoveredEmotion(null)}
+                                                    className={`
+                                                        w-full text-left px-5 py-3 rounded-xl transition-all duration-300 font-medium tracking-wide flex items-center justify-between group
+                                                        ${isSelected
+                                                            ? 'bg-gradient-to-r from-white to-zinc-200 text-black shadow-lg shadow-white/10'
+                                                            : 'bg-white/5 text-white/80 hover:bg-white/10 border border-white/5 hover:border-white/20'}
+                                                    `}
+                                                >
+                                                    <span className={`text-base block ${isSelected ? 'text-black font-semibold' : 'text-white'}`}>{em.label}</span>
+                                                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black text-white' : 'border-white/20 text-transparent group-hover:border-white/40'}`}>
+                                                        {isSelected && <span className="text-xs">✓</span>}
+                                                    </div>
+                                                </motion.button>
+                                            );
+                                        })}
+                                    </motion.div>
+                                )}
+                            </div>
                         );
                     })}
                 </div>
