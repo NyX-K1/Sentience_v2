@@ -12,8 +12,20 @@ export default function MoodTimeline({ entries }: MoodTimelineProps) {
 
     if (!data || data.length === 0) {
         return (
-            <div className="w-full h-64 flex items-center justify-center border border-white/10 rounded-2xl bg-white/5">
-                <p className="text-white/40 text-sm tracking-widest uppercase">Insufficient temporal data</p>
+            <div className="w-full h-80 flex flex-col items-center justify-center border border-white/10 border-dashed rounded-3xl bg-white/5 p-6 text-center relative overflow-hidden">
+                {/* Subtle curve in background resembling the chart they will get */}
+                <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+                    <svg viewBox="0 0 100 20" className="w-full h-full preserve-3d" preserveAspectRatio="none">
+                        <path d="M0,10 Q25,20 50,10 T100,10" fill="none" stroke="white" strokeWidth="0.5" />
+                    </svg>
+                </div>
+                <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+                        <span className="text-2xl opacity-50">📈</span>
+                    </div>
+                    <h3 className="text-lg text-white/70 mb-2 font-medium">Trajectory Unavailable</h3>
+                    <p className="text-white/40 text-sm tracking-widest uppercase max-w-xs">Return later once you have logged multiple entries across different days.</p>
+                </div>
             </div>
         );
     }

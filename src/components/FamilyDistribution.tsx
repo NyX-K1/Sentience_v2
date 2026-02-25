@@ -12,8 +12,12 @@ export default function FamilyDistribution({ entries }: FamilyDistributionProps)
 
     if (!data || data.length === 0) {
         return (
-            <div className="w-full h-80 flex items-center justify-center border border-white/10 rounded-3xl bg-white/5">
-                <p className="text-white/40 text-sm tracking-widest uppercase">Needs more data</p>
+            <div className="w-full h-80 flex flex-col items-center justify-center border border-white/10 border-dashed rounded-3xl bg-white/5 p-6 text-center">
+                <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+                    <span className="text-2xl opacity-50">🧭</span>
+                </div>
+                <h3 className="text-lg text-white/70 mb-2 font-medium">No Emotional Center Yet</h3>
+                <p className="text-white/40 text-sm tracking-widest uppercase">Log at least one entry to reveal your family distribution</p>
             </div>
         );
     }

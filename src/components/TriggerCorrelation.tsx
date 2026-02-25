@@ -12,9 +12,16 @@ export default function TriggerCorrelation({ entries }: TriggerCorrelationProps)
 
     if (!data || data.length === 0) {
         return (
-            <div className="w-full h-80 flex items-center justify-center border border-white/10 rounded-3xl bg-white/5">
-                <p className="text-white/40 text-sm tracking-widest uppercase text-center px-4">
-                    Log more entries with contexts to reveal trigger correlations.
+            <div className="w-full h-96 flex flex-col items-center justify-center border border-white/10 border-dashed rounded-3xl bg-white/5 p-6 text-center">
+                <div className="flex items-end gap-2 mb-6 opacity-30">
+                    <div className="w-3 h-12 bg-white rounded-t-sm" />
+                    <div className="w-3 h-20 bg-emerald-400 rounded-t-sm" />
+                    <div className="w-3 h-8 bg-rose-400 rounded-t-sm" />
+                    <div className="w-3 h-16 bg-white rounded-t-sm" />
+                </div>
+                <h3 className="text-lg text-white/70 mb-2 font-medium">Trigger Correlations Hidden</h3>
+                <p className="text-white/40 text-sm tracking-widest uppercase max-w-xs">
+                    Log emotional contexts (like Work, Health, or Deep Sleep) to see how they impact your valence.
                 </p>
             </div>
         );

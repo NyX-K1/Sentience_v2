@@ -3,6 +3,7 @@ import { EmotionFamily, EmotionDef } from '../types/mood';
 import { emotions as allEmotions } from '../data/emotions';
 import { useState } from 'react';
 import EmotionTooltip from './EmotionTooltip';
+import { FAMILY_COLORS } from './EmotionWheel';
 
 interface EmotionBloomProps {
     family: EmotionFamily | null;
@@ -31,6 +32,9 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
             exit={{ opacity: 0 }}
             className="w-full max-w-4xl mx-auto flex flex-col items-center justify-start pt-12 min-h-[70vh] relative"
         >
+            {/* Ambient Family Glow */}
+            <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br ${FAMILY_COLORS[family]} rounded-full mix-blend-screen opacity-20 blur-[100px] pointer-events-none transition-all duration-1000`} />
+
             <button onClick={onBack} className="absolute top-0 left-4 md:left-8 text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors flex items-center gap-2 z-50">
                 ← Back to Families
             </button>
@@ -57,11 +61,11 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                                 onMouseEnter={() => setHoveredEmotion(em)}
                                 onMouseLeave={() => setHoveredEmotion(null)}
                                 className={`
-                                    rounded-full border backdrop-blur-md transition-all duration-300 font-medium tracking-wide
+                                    rounded-full border backdrop-blur-xl transition-all duration-300 font-medium tracking-wide
                                     ${paddingSize}
                                     ${isSelected
-                                        ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.4)]'
-                                        : 'bg-white/5 text-white/80 border-white/20 hover:bg-white/10 hover:border-white/40'}
+                                        ? 'bg-white text-black border-white shadow-[0_0_30px_rgba(255,255,255,0.6)] scale-110 z-10'
+                                        : 'bg-black/50 text-white/90 border-white/10 hover:bg-white/10 hover:border-white/30'}
                                 `}
                             >
                                 {isSelected && <span className="mr-2 text-xs">✓</span>}

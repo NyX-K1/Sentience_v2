@@ -65,13 +65,13 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
             </div>
 
             {/* Triggers */}
-            <div className="mb-10">
-                <span className="text-xs text-white/50 uppercase tracking-widest block mb-4">What's influencing this?</span>
-                <div className="flex flex-wrap gap-2">
+            <div className="mb-10 w-full max-w-xl mx-auto">
+                <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">What's influencing this?</span>
+                <div className="flex flex-wrap gap-2 justify-center">
                     {DEFAULT_TRIGGERS.map(t => (
                         <button
                             key={t} onClick={() => toggleTrigger(t)}
-                            className={`px-4 py-1.5 rounded-full text-sm font-sans transition-colors border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white' : 'bg-transparent border-white/20 text-white/70 hover:border-white/50'}`}
+                            className={`px-5 py-2 rounded-full text-sm font-sans transition-all duration-300 border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105' : 'bg-black/40 border-white/10 text-white/70 hover:border-white/50 hover:bg-white/5'}`}
                         >
                             {t}
                         </button>
@@ -96,16 +96,16 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
             </div>
 
             {/* Note */}
-            <div className="mb-10">
-                <span className="text-xs text-white/50 uppercase tracking-widest block mb-4">Quick Note</span>
+            <div className="mb-10 w-full max-w-xl mx-auto">
+                <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">Quick Note</span>
                 <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     maxLength={500}
-                    placeholder="What's on your mind?"
-                    className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-white font-sans focus:outline-none focus:border-white/30 resize-none"
+                    placeholder="Capture your thoughts..."
+                    className="w-full h-32 bg-black/40 border border-white/10 rounded-2xl p-5 text-white font-sans focus:outline-none focus:border-white/40 focus:bg-white/5 transition-all resize-none shadow-inner"
                 />
-                <div className="text-right text-xs text-white/30 mt-2 font-mono">{note.length}/500</div>
+                <div className="text-right text-xs text-white/30 mt-2 font-mono pr-2">{note.length}/500</div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

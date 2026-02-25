@@ -55,9 +55,9 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
                         whileTap={{ scale: 0.95 }}
                         onClick={() => onSelectFamily(family)}
                         className={`
-                            relative w-32 h-40 md:w-40 md:h-52 rounded-[40px] rounded-bl-md 
+                            relative w-[42%] max-w-[160px] h-36 md:w-40 md:h-52 rounded-[32px] md:rounded-[40px] rounded-bl-md 
                             bg-gradient-to-br ${FAMILY_COLORS[family]} 
-                            shadow-lg flex flex-col items-center justify-end p-6 
+                            shadow-lg flex flex-col items-center justify-end p-4 md:p-6 
                             overflow-hidden group
                         `}
                     >
@@ -65,7 +65,7 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                         <div className="absolute top-0 left-0 w-full h-1/2 bg-white/10 rounded-t-[40px] pointer-events-none" />
 
-                        <span className="relative z-10 text-white font-medium text-lg tracking-wider drop-shadow-md">
+                        <span className="relative z-10 text-white font-medium text-sm md:text-lg tracking-wider drop-shadow-md text-center leading-tight break-words w-full px-1">
                             {family}
                         </span>
                     </motion.button>
