@@ -45,27 +45,27 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
 
             <h2 className="text-2xl md:text-3xl font-light mb-12 tracking-wide text-center">Which family of emotions feels closest?</h2>
 
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8 w-full">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full px-2">
                 {families.map((family, i) => (
                     <motion.button
                         key={family}
-                        initial={{ opacity: 0, scale: 0.8 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1, transition: { delay: i * 0.1 } }}
-                        whileHover={{ scale: 1.05, y: -5 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => onSelectFamily(family)}
                         className={`
-                            relative w-36 h-36 sm:w-44 sm:h-52 md:w-48 md:h-60 rounded-[32px] sm:rounded-[40px] rounded-bl-md 
+                            relative w-full h-32 md:h-44 rounded-2xl md:rounded-3xl
                             bg-gradient-to-br ${FAMILY_COLORS[family]} 
-                            shadow-xl flex flex-col items-center justify-end p-4 sm:p-6 
-                            overflow-hidden group
+                            flex flex-col items-center justify-end p-4 
+                            overflow-hidden group border border-white/10
                         `}
                     >
                         {/* Inner glass highlight */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                         <div className="absolute top-0 left-0 w-full h-1/2 bg-white/10 rounded-t-[40px] pointer-events-none" />
 
-                        <span className="relative z-10 text-white font-medium text-xs sm:text-base md:text-lg tracking-widest drop-shadow-md text-center leading-tight break-words w-full px-2 mb-2">
+                        <span className="relative z-10 text-white font-medium text-sm md:text-base tracking-wide text-center leading-snug break-words w-full px-1">
                             {family}
                         </span>
                     </motion.button>

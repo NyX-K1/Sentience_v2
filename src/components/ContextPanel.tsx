@@ -6,10 +6,9 @@ const DEFAULT_TRIGGERS = ['Work', 'Relationship', 'Health', 'Finance', 'Social',
 interface ContextPanelProps {
     onSave: (data: { intensity: number; triggers: string[]; customTriggers: string[]; note: string }) => void;
     onBack: () => void;
-    dominantColorHex?: string;
 }
 
-export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffffff' }: ContextPanelProps) {
+export default function ContextPanel({ onSave, onBack }: ContextPanelProps) {
     const [intensity, setIntensity] = useState(5);
     const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
     const [customTriggers, setCustomTriggers] = useState<string[]>([]);
@@ -57,10 +56,7 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
                     min="1" max="10"
                     value={intensity}
                     onChange={(e) => setIntensity(Number(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer"
-                    style={{
-                        background: `linear-gradient(to right, ${dominantColorHex} ${(intensity - 1) * 11.1}%, rgba(255,255,255,0.1) ${(intensity - 1) * 11.1}%)`
-                    }}
+                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
                 />
             </div>
 
@@ -71,7 +67,7 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
                     {DEFAULT_TRIGGERS.map(t => (
                         <button
                             key={t} onClick={() => toggleTrigger(t)}
-                            className={`px-5 py-2 rounded-full text-sm font-sans transition-all duration-300 border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)] scale-105' : 'bg-black/40 border-white/10 text-white/70 hover:border-white/50 hover:bg-white/5'}`}
+                            className={`px-4 py-2 rounded-lg text-sm transition-colors border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'}`}
                         >
                             {t}
                         </button>
@@ -79,7 +75,7 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
                     {customTriggers.map(t => (
                         <button
                             key={`c-${t}`} onClick={() => toggleTrigger(t, true)}
-                            className={`px-4 py-1.5 rounded-full text-sm font-sans transition-colors border bg-white/20 text-white border-white/40`}
+                            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors border bg-white text-black border-white`}
                         >
                             {t} ✕
                         </button>
@@ -90,7 +86,7 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
                         value={customInput}
                         onChange={(e) => setCustomInput(e.target.value)}
                         onKeyDown={handleAddCustom}
-                        className="px-4 py-1.5 rounded-full text-sm font-sans bg-transparent border border-white/20 text-white placeholder-white/30 w-48 focus:outline-none focus:border-white/50"
+                        className="px-4 py-2 rounded-lg text-sm bg-transparent border border-white/20 text-white placeholder-white/30 w-full max-w-[200px] focus:outline-none focus:border-white/50 focus:bg-white/5 transition-colors"
                     />
                 </div>
             </div>
@@ -102,8 +98,8 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     maxLength={500}
-                    placeholder="Capture your thoughts..."
-                    className="w-full h-32 bg-black/40 border border-white/10 rounded-2xl p-5 text-white font-sans focus:outline-none focus:border-white/40 focus:bg-white/5 transition-all resize-none shadow-inner"
+                    placeholder="Optional notes..."
+                    className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-white/30 focus:bg-white/10 transition-colors resize-none"
                 />
                 <div className="text-right text-xs text-white/30 mt-2 font-mono pr-2">{note.length}/500</div>
             </div>
@@ -111,13 +107,13 @@ export default function ContextPanel({ onSave, onBack, dominantColorHex = '#ffff
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                     onClick={() => onSave({ intensity, triggers: selectedTriggers, customTriggers, note })}
-                    className="px-8 py-4 bg-white text-black font-medium rounded-full uppercase tracking-widest text-sm hover:scale-105 active:scale-95 transition-transform"
+                    className="px-6 py-3 bg-white text-black font-medium rounded-xl text-sm hover:bg-zinc-200 transition-colors"
                 >
                     Save Entry
                 </button>
                 <button
                     onClick={() => onSave({ intensity, triggers: selectedTriggers, customTriggers, note })} // in a real app, this would route to journaling and pass state
-                    className="px-8 py-4 bg-transparent text-white border border-white/20 font-medium rounded-full uppercase tracking-widest text-sm hover:bg-white/5 transition-colors"
+                    className="px-6 py-3 bg-transparent text-white border border-white/20 font-medium rounded-xl text-sm hover:bg-white/5 transition-colors"
                 >
                     Save & Journal →
                 </button>
