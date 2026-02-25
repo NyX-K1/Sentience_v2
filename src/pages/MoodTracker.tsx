@@ -126,6 +126,7 @@ const MoodTracker = () => {
 
                             {showContext && (
                                 <ContextPanel
+                                    selectedEmotionIds={selectedEmotions}
                                     onSave={handleSave}
                                     onBack={() => setShowContext(false)}
                                 />

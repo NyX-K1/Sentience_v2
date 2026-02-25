@@ -1,16 +1,29 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { emotions as allEmotions } from '../data/emotions';
+import { EmotionDef } from '../types/mood';
+import EmotionTooltip from './EmotionTooltip';
 
 const DEFAULT_TRIGGERS = ['Work', 'Relationship', 'Health', 'Finance', 'Social', 'Self-Image', 'Family', 'Creativity', 'Sleep', 'Weather', 'News'];
 
 interface ContextPanelProps {
+    selectedEmotionIds: string[];
     onSave: (data: { intensity: number; triggers: string[]; customTriggers: string[]; note: string }) => void;
     onBack: () => void;
 }
 
-export default function ContextPanel({ onSave, onBack }: ContextPanelProps) {
+export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: ContextPanelProps) {
     const [intensity, setIntensity] = useState(5);
     const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
+    const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
+
+    // Filter and group selected emotions by family
+    const selectedEmotions = allEmotions.filter(e => selectedEmotionIds.includes(e.id));
+    const groupedEmotions = selectedEmotions.reduce((acc, emotion) => {
+        if (!acc[emotion.family]) acc[emotion.family] = [];
+        acc[emotion.family].push(emotion);
+        return acc;
+    }, {} as Record<string, EmotionDef[]>);
     const [customTriggers, setCustomTriggers] = useState<string[]>([]);
     const [customInput, setCustomInput] = useState('');
     const [note, setNote] = useState('');
@@ -43,6 +56,44 @@ export default function ContextPanel({ onSave, onBack }: ContextPanelProps) {
             </button>
 
             <h3 className="text-xl font-light mb-8 text-center tracking-wider">Add context <span className="text-white/30 text-sm">(optional)</span></h3>
+
+            {/* Selected Emotions Overview */}
+            {selectedEmotions.length > 0 && (
+                <div className="mb-10 w-full max-w-xl mx-auto relative">
+                    <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">Selected Emotions</span>
+                    <div className="flex flex-col gap-4">
+                        {Object.entries(groupedEmotions).map(([family, ems]) => (
+                            <div key={family} className="bg-white/5 border border-white/10 rounded-xl p-4">
+                                <div className="text-xs text-white/40 uppercase tracking-widest mb-3 flex items-center justify-between">
+                                    <span>{family}</span>
+                                    <span>{ems.length}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {ems.map(em => (
+                                        <div
+                                            key={em.id}
+                                            onMouseEnter={() => setHoveredEmotion(em)}
+                                            onMouseLeave={() => setHoveredEmotion(null)}
+                                            className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 rounded-lg text-sm text-white/90 transition-colors cursor-help group"
+                                        >
+                                            {em.label}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Floating Tooltip Component */}
+            {hoveredEmotion && (
+                <div className="fixed inset-x-0 bottom-10 z-50 pointer-events-none flex justify-center">
+                    <div className="transform origin-bottom pointer-events-auto shadow-2xl">
+                        <EmotionTooltip emotion={hoveredEmotion} />
+                    </div>
+                </div>
+            )}
 
             {/* Intensity Slider */}
             <div className="mb-10 w-full max-w-md mx-auto">
