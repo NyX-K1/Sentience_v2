@@ -34,7 +34,7 @@ export default function MoodCompass({ selectedQuadrant, onSelectQuadrant }: Mood
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px] mx-auto rounded-full p-2"
+            className="relative w-[340px] h-[340px] md:w-[480px] md:h-[480px] mx-auto rounded-full p-2"
         >
             {/* Base Circle Background */}
             <div className="absolute inset-0 rounded-full bg-white/5 border border-white/10 shadow-[0_0_50px_rgba(255,255,255,0.05)] backdrop-blur-3xl overflow-hidden">
@@ -62,11 +62,11 @@ export default function MoodCompass({ selectedQuadrant, onSelectQuadrant }: Mood
                         {/* Hover Gradient Fill */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${q.colors} opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none`} />
 
-                        <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4 sm:p-6">
-                            <h3 className="text-xl md:text-2xl font-light tracking-wide text-white/90 group-hover:text-white transition-colors text-center w-[85%] max-w-[85%] break-words hyphens-auto [word-break:break-word] leading-tight">
+                        <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-6 sm:p-8">
+                            <h3 className="text-xl md:text-3xl font-light tracking-wide text-white/90 group-hover:text-white transition-colors text-center w-[90%] break-words leading-tight">
                                 {q.label}
                             </h3>
-                            <p className="text-xs text-white/0 group-hover:text-white/80 mt-1 transition-colors duration-300 font-sans text-center w-[85%] max-w-[85%] break-words hyphens-auto [word-break:break-word] leading-tight">
+                            <p className="text-xs sm:text-sm text-white/0 group-hover:text-white/80 mt-2 transition-colors duration-300 font-sans text-center w-[90%] break-words leading-tight">
                                 {q.desc}
                             </p>
                         </div>
