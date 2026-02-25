@@ -19,7 +19,7 @@ export default function SentienceLanding() {
             links: [
                 { label: "Guided Breakthroughs", ariaLabel: "Start Guided Breakthrough Session" },
                 { label: "Thoughts and Exercises", ariaLabel: "Cognitive Reframing Tools & Relaxation", href: "/cognitive-reframing" },
-                { label: "Neural Insights", ariaLabel: "View Neural Insights", href: "/mind-info" }
+                { label: "Mood Tracker", ariaLabel: "View Mood Tracker", href: "/mood-tracker" }
             ]
         },
         {
