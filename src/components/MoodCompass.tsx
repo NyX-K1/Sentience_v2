@@ -61,10 +61,12 @@ export default function MoodCompass({ selectedQuadrant, onSelectQuadrant }: Mood
                         onClick={() => onSelectQuadrant(q.id)}
                     >
                         {/* Hover Gradient Fill */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${q.colors} opacity-0 group-hover:opacity-40 transition-opacity duration-300 pointer-events-none`} />
+                        <div className={`absolute inset-0 bg-gradient-to-br ${q.colors} opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none`} />
 
-                        <h3 className="text-xl md:text-2xl font-light tracking-wide text-white group-hover:scale-105 transition-transform max-w-full px-2 break-words text-center leading-tight">{q.label}</h3>
-                        <p className="text-xs text-white/70 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-sans max-w-full px-2 break-words text-center">{q.desc}</p>
+                        <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4 sm:p-6">
+                            <h3 className="text-lg sm:text-xl md:text-2xl font-light tracking-wide text-white/90 group-hover:text-white transition-colors text-center w-full">{q.label}</h3>
+                            <p className="text-[10px] sm:text-xs text-white/0 group-hover:text-white/80 mt-1 sm:mt-2 transition-colors duration-300 font-sans text-center w-full leading-tight">{q.desc}</p>
+                        </div>
                     </motion.div>
                 ))}
             </div>
