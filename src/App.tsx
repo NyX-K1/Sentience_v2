@@ -13,6 +13,7 @@ import ScrollAnimationPage from './pages/ScrollAnimationPage';
 import VoiceNotes from './pages/VoiceNotes';
 
 import EmotionalPatterns from './pages/EmotionalPatterns';
+import MoodTracker from './pages/MoodTracker';
 
 const App = () => {
     return (
@@ -31,6 +32,7 @@ const App = () => {
                 <Route path="/cognitive-reframing" element={<CognitiveReframing />} />
                 <Route path="/balanced-thought" element={<BalancedThoughtPage />} />
                 <Route path="/voice-notes" element={<VoiceNotes />} />
+                <Route path="/mood-tracker" element={<MoodTracker />} />
             </Routes>
         </BrowserRouter>
     );

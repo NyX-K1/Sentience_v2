@@ -119,9 +119,8 @@ export default function CardNav({
         } else if (label === "Thoughts and Exercises") {
             setShowThoughtRewiring(true);
             handleOpenChange(false);
-        } else if (label === "Neural Insights") {
-            setShowNeuralInsights(true);
-            handleOpenChange(false);
+        } else if (label === "Mood Tracker") {
+            window.location.href = href || "/mood-tracker";
         } else if (href) {
             window.location.href = href;
         }
