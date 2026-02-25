@@ -64,8 +64,8 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                         <div className="absolute top-0 left-0 w-full h-1/2 bg-white/10 rounded-t-[40px] pointer-events-none" />
 
-                        <div className="relative z-10 w-full px-1 flex items-center justify-center h-[50%]">
-                            <span className="text-white font-medium text-xs sm:text-sm md:text-base tracking-wide text-center leading-tight break-words [word-break:break-word] hyphens-auto max-w-full">
+                        <div className="relative z-10 w-full px-2 flex items-center justify-center h-[50%]">
+                            <span className="text-white font-medium text-xs sm:text-sm md:text-lg tracking-wide text-center leading-tight break-words break-all sm:break-words line-clamp-2 max-w-full">
                                 {family}
                             </span>
                         </div>
