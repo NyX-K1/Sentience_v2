@@ -70,25 +70,28 @@ const MoodTracker = () => {
             <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden">
 
                 {/* Header & Sticky Tab Navigation */}
-                <header className="flex-shrink-0 mb-8 z-20 sticky top-0 bg-black/80 backdrop-blur-md pt-4 pb-4 border-b border-white/10">
-                    <h1 className="text-3xl font-light tracking-wide mb-6">Mood Tracker</h1>
+                <header className="flex-shrink-0 mb-8 z-20 sticky top-0 bg-transparent pt-8 pb-4">
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-transparent pointer-events-none" />
+                    <div className="relative z-10 text-center">
+                        <h1 className="text-3xl md:text-4xl font-light tracking-wide mb-8 drop-shadow-md">Sentience <span className="font-semibold text-cyan-400">Tracker</span></h1>
 
-                    <div className="flex space-x-2 bg-white/5 p-1 rounded-full w-full max-w-md mx-auto relative">
-                        {(['log', 'trends', 'patterns'] as const).map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setActiveTab(tab)}
-                                className={`
-                    flex-1 py-2 px-4 rounded-full text-sm uppercase tracking-wider transition-all duration-300 relative
-                    ${activeTab === tab ? 'text-black font-medium' : 'text-zinc-400 hover:text-white'}
-                  `}
-                            >
-                                {activeTab === tab && (
-                                    <span className="absolute inset-0 bg-white rounded-full -z-10 shadow-[0_0_15px_rgba(255,255,255,0.3)]" />
-                                )}
-                                {tab}
-                            </button>
-                        ))}
+                        <div className="flex space-x-2 bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-md p-1.5 rounded-full w-full max-w-md mx-auto relative border border-white/10 shadow-2xl">
+                            {(['log', 'trends', 'patterns'] as const).map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`
+                                        flex-1 py-2 px-4 rounded-full text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all duration-300 relative
+                                        ${activeTab === tab ? 'text-black font-semibold' : 'text-zinc-400 hover:text-white'}
+                                    `}
+                                >
+                                    {activeTab === tab && (
+                                        <span className="absolute inset-0 bg-white rounded-full -z-10 shadow-[0_0_20px_rgba(255,255,255,0.4)]" />
+                                    )}
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </header>
 

@@ -1,74 +1,48 @@
 import { EmotionDef } from '../types/mood';
 
-// Example populated list (subset of the full 150 for this immediate task, will expand)
+// Expanded subset of the 150+ emotion taxonomy
 export const emotions: EmotionDef[] = [
-    {
-        id: "joy-ecstatic",
-        label: "Ecstatic",
-        family: "Joy",
-        intensity: 4,
-        valence: 0.9,
-        arousal: 0.9,
-        definition: "An overwhelming feeling of great happiness or joyful excitement.",
-        example: "Achieving a lifelong dream or receiving incredible news.",
-        bodySignals: ["Racing heart", "Lightness in chest", "Smiling widely"],
-        cognitivePatterns: ["Optimistic thoughts", "Fast-paced thinking"],
-        behavioralTendencies: ["Jumping", "Laughing", "Hugging"],
-        healthyResponses: ["Share the joy", "Channel energy creatively"],
-        didYouKnow: "Ecstasy often dilates pupils and increases heart rate, mimicking a mild adrenaline rush.",
-        colorHex: "#FACC15",
-        quadrant: "energized"
-    },
-    {
-        id: "fear-anxious",
-        label: "Anxious",
-        family: "Fear",
-        intensity: 2,
-        valence: -0.6,
-        arousal: 0.7,
-        definition: "Experiencing worry, unease, or nervousness, typically about an imminent event or something with an uncertain outcome.",
-        example: "Waiting for important test results or preparing for a big presentation.",
-        bodySignals: ["Shallow breathing", "Muscle tension", "Butterflies in stomach"],
-        cognitivePatterns: ["Catastrophizing", "Racing thoughts", "Fixating on worst-case scenarios"],
-        behavioralTendencies: ["Pacing", "Fidgeting", "Avoidance"],
-        healthyResponses: ["Box breathing", "Grounding exercises (5-4-3-2-1)"],
-        didYouKnow: "Anxiety is an evolutionary mechanism designed to keep us alert to potential threats.",
-        colorHex: "#A855F7",
-        quadrant: "tense"
-    },
-    {
-        id: "sadness-melancholic",
-        label: "Melancholic",
-        family: "Sadness",
-        intensity: 2,
-        valence: -0.5,
-        arousal: -0.4,
-        definition: "A gentle, pensive, and sometimes lingering sadness without any obvious cause.",
-        example: "Looking out the window on a rainy day, reflecting on the past.",
-        bodySignals: ["Slowed heart rate", "Heavy feeling in limbs", "Slight drooping of posture"],
-        cognitivePatterns: ["Introspective", "Nostalgic", "Reflective"],
-        behavioralTendencies: ["Seeking solitude", "Listening to slow music", "Quiet contemplation"],
-        healthyResponses: ["Journaling", "Creative expression", "Allowing the feeling without judgment"],
-        didYouKnow: "In ancient times, 'melancholia' was blamed on an excess of 'black bile', one of the four bodily humors.",
-        colorHex: "#3B82F6",
-        quadrant: "low"
-    },
-    {
-        id: "trust-serene",
-        label: "Serene",
-        family: "Trust", // Classifying serenity under trust/calm here for quadrant mapping
-        intensity: 1,
-        valence: 0.7,
-        arousal: -0.6,
-        definition: "Calm, peaceful, and untroubled; tranquil.",
-        example: "Sitting quietly in nature after a long, productive week.",
-        bodySignals: ["Slow, deep breathing", "Relaxed muscles", "Lowered heart rate"],
-        cognitivePatterns: ["Clear mind", "Present moment awareness", "Lack of worry"],
-        behavioralTendencies: ["Stillness", "Gentle smiling", "Closing eyes"],
-        healthyResponses: ["Meditation", "Enjoying the present moment", "Gentle stretching"],
-        didYouKnow: "Serenity is associated with increased parasympathetic nervous system activity.",
-        colorHex: "#2DD4BF",
-        quadrant: "calm"
-    }
-    // ... we will populate the rest of the 150+ emotions as the data layer matures
+    // JOY FAMILY
+    { id: "joy-ecstatic", label: "Ecstatic", family: "Joy", intensity: 4, valence: 0.9, arousal: 0.9, definition: "Overwhelming feeling of great happiness or joyful excitement.", example: "Achieving a lifelong dream.", bodySignals: ["Racing heart", "Smiling widely"], cognitivePatterns: ["Optimistic thoughts"], behavioralTendencies: ["Jumping", "Laughing"], healthyResponses: ["Share the joy"], didYouKnow: "Ecstasy mimics a mild adrenaline rush.", colorHex: "#FACC15", quadrant: "energized" },
+    { id: "joy-elated", label: "Elated", family: "Joy", intensity: 3, valence: 0.8, arousal: 0.7, definition: "Exhilarated, very happy and proud.", example: "Receiving unexpected good news.", bodySignals: ["Lightness in chest"], cognitivePatterns: ["Expansive thinking"], behavioralTendencies: ["Smiling"], healthyResponses: ["Express gratitude"], didYouKnow: "Elation naturally broadens your visual field.", colorHex: "#FDE047", quadrant: "energized" },
+    { id: "joy-amused", label: "Amused", family: "Joy", intensity: 2, valence: 0.6, arousal: 0.5, definition: "Finding something funny or entertaining.", example: "Watching a comedy.", bodySignals: ["Chuckling", "Clapped hands"], cognitivePatterns: ["Playfulness"], behavioralTendencies: ["Laughing"], healthyResponses: ["Lean into humor"], didYouKnow: "Laughter reduces cortisol levels.", colorHex: "#FEF08A", quadrant: "energized" },
+    { id: "joy-content", label: "Content", family: "Joy", intensity: 1, valence: 0.5, arousal: -0.2, definition: "A state of peaceful happiness.", example: "Relaxing on a Sunday morning.", bodySignals: ["Relaxed muscles"], cognitivePatterns: ["Absence of desire for more"], behavioralTendencies: ["Stillness"], healthyResponses: ["Savor the moment"], didYouKnow: "Contentment is linked to long-term well-being rather than short-term spikes.", colorHex: "#FEF9C3", quadrant: "calm" },
+
+    // TRUST FAMILY (Calm / Accepted)
+    { id: "trust-serene", label: "Serene", family: "Trust", intensity: 1, valence: 0.7, arousal: -0.6, definition: "Calm, peaceful, and untroubled.", example: "Sitting quietly in nature.", bodySignals: ["Slow, deep breathing"], cognitivePatterns: ["Clear mind"], behavioralTendencies: ["Stillness"], healthyResponses: ["Meditation"], didYouKnow: "Serenity activates the parasympathetic nervous system.", colorHex: "#2DD4BF", quadrant: "calm" },
+    { id: "trust-secure", label: "Secure", family: "Trust", intensity: 2, valence: 0.6, arousal: -0.4, definition: "Feeling safe and free from danger or threat.", example: "Being with a long-term reliable partner.", bodySignals: ["Low muscular tension"], cognitivePatterns: ["Trust in the future"], behavioralTendencies: ["Open posture"], healthyResponses: ["Deepen connection"], didYouKnow: "Security is foundational in Maslow's hierarchy.", colorHex: "#14B8A6", quadrant: "calm" },
+    { id: "trust-vulnerable", label: "Vulnerable", family: "Trust", intensity: 3, valence: 0.2, arousal: 0.3, definition: "Willing to show emotion or weakness without defense.", example: "Opening up about past trauma.", bodySignals: ["Trembling voice", "Eye contact"], cognitivePatterns: ["Acceptance of risk"], behavioralTendencies: ["Honest communication"], healthyResponses: ["Self-compassion"], didYouKnow: "Vulnerability is closely linked to courage.", colorHex: "#0D9488", quadrant: "calm" },
+
+    // FEAR FAMILY
+    { id: "fear-terrified", label: "Terrified", family: "Fear", intensity: 4, valence: -0.9, arousal: 0.9, definition: "Extreme fear.", example: "A near-miss car accident.", bodySignals: ["Sweating", "Dilated pupils", "Pounding heart"], cognitivePatterns: ["Desire to escape instantly"], behavioralTendencies: ["Freeze or flee"], healthyResponses: ["Grounding techniques", "Find safety"], didYouKnow: "Terror bypasses the prefrontal cortex entirely.", colorHex: "#7E22CE", quadrant: "tense" },
+    { id: "fear-anxious", label: "Anxious", family: "Fear", intensity: 2, valence: -0.6, arousal: 0.7, definition: "Experiencing worry or unease about an uncertain outcome.", example: "Waiting for test results.", bodySignals: ["Shallow breathing", "Butterflies"], cognitivePatterns: ["Catastrophizing"], behavioralTendencies: ["Pacing", "Avoidance"], healthyResponses: ["Box breathing"], didYouKnow: "Anxiety is an evolutionary mechanism designed to keep us alert.", colorHex: "#A855F7", quadrant: "tense" },
+    { id: "fear-apprehensive", label: "Apprehensive", family: "Fear", intensity: 1, valence: -0.3, arousal: 0.4, definition: "Anticipating something bad might happen.", example: "Before a difficult conversation.", bodySignals: ["Slight tension"], cognitivePatterns: ["Over-preparation"], behavioralTendencies: ["Hesitation"], healthyResponses: ["Reality check"], didYouKnow: "Apprehension serves as a preliminary warning system.", colorHex: "#C084FC", quadrant: "tense" },
+
+    // SURPRISE FAMILY
+    { id: "surp-astonished", label: "Astonished", family: "Surprise", intensity: 4, valence: 0.5, arousal: 0.8, definition: "Greatly surprised or impressed.", example: "A massive plot twist.", bodySignals: ["Dropped jaw", "Widened eyes"], cognitivePatterns: ["Disbelief"], behavioralTendencies: ["Gasping"], healthyResponses: ["Process the new information"], didYouKnow: "Astonishment triggers a brief cognitive freeze to absorb data.", colorHex: "#0284C7", quadrant: "energized" },
+    { id: "surp-confused", label: "Confused", family: "Surprise", intensity: 2, valence: -0.2, arousal: 0.4, definition: "Unable to think clearly or understand.", example: "Reading complex documentation.", bodySignals: ["Furrowed brow"], cognitivePatterns: ["Searching for connections"], behavioralTendencies: ["Squinting", "Asking questions"], healthyResponses: ["Take a step back"], didYouKnow: "Confusion is theoretically an intermediate state before learning.", colorHex: "#38BDF8", quadrant: "tense" },
+
+    // SADNESS FAMILY
+    { id: "sad-devastated", label: "Devastated", family: "Sadness", intensity: 4, valence: -0.9, arousal: -0.5, definition: "Severe and overwhelming shock or grief.", example: "Losing a loved one.", bodySignals: ["Crying", "Physical ache in chest"], cognitivePatterns: ["Hopelessness"], behavioralTendencies: ["Isolation"], healthyResponses: ["Seek support", "Grieve openly"], didYouKnow: "Emotional pain shares neural pathways with physical pain.", colorHex: "#1E3A8A", quadrant: "low" },
+    { id: "sad-depressed", label: "Depressed", family: "Sadness", intensity: 3, valence: -0.8, arousal: -0.8, definition: "Severe despondency and dejection.", example: "A long period of low energy.", bodySignals: ["Lethargy", "Heavy limbs"], cognitivePatterns: ["Worthlessness"], behavioralTendencies: ["Sleeping excessively"], healthyResponses: ["Therapy", "Small steps"], didYouKnow: "Depression radically alters sleep architecture.", colorHex: "#1D4ED8", quadrant: "low" },
+    { id: "sad-melancholic", label: "Melancholic", family: "Sadness", intensity: 2, valence: -0.5, arousal: -0.4, definition: "A pensive sadness without obvious cause.", example: "A rainy day indoors.", bodySignals: ["Slowed heart rate"], cognitivePatterns: ["Nostalgia"], behavioralTendencies: ["Contemplation"], healthyResponses: ["Journaling"], didYouKnow: "Historically blamed on black bile.", colorHex: "#3B82F6", quadrant: "low" },
+    { id: "sad-disappointed", label: "Disappointed", family: "Sadness", intensity: 1, valence: -0.4, arousal: -0.2, definition: "Sadness or displeasure caused by the non-fulfillment of hopes.", example: "A canceled plan.", bodySignals: ["Sighing"], cognitivePatterns: ["Re-evaluating expectations"], behavioralTendencies: ["Slumping shoulders"], healthyResponses: ["Acceptance"], didYouKnow: "Disappointment helps recalibrate future predictions.", colorHex: "#93C5FD", quadrant: "low" },
+
+    // ANGER FAMILY
+    { id: "anger-furious", label: "Furious", family: "Anger", intensity: 4, valence: -0.8, arousal: 0.9, definition: "Extremely angry.", example: "Being deeply betrayed.", bodySignals: ["Red face", "Clenched fists"], cognitivePatterns: ["Revenge", "Injustice"], behavioralTendencies: ["Yelling", "Attacking"], healthyResponses: ["Distance", "Physical exertion"], didYouKnow: "Fury floods the brain with norepinephrine.", colorHex: "#9F1239", quadrant: "tense" },
+    { id: "anger-frustrated", label: "Frustrated", family: "Anger", intensity: 2, valence: -0.6, arousal: 0.6, definition: "Feeling annoyance at an inability to change something.", example: "Code refusing to compile.", bodySignals: ["Tight jaw"], cognitivePatterns: ["Feeling blocked"], behavioralTendencies: ["Sighing", "Complaining"], healthyResponses: ["Take a break"], didYouKnow: "Frustration often precedes a creative breakthrough.", colorHex: "#E11D48", quadrant: "tense" },
+    { id: "anger-annoyed", label: "Annoyed", family: "Anger", intensity: 1, valence: -0.3, arousal: 0.4, definition: "Slightly angry; irritated.", example: "A persistent fly in the room.", bodySignals: ["Rolling eyes"], cognitivePatterns: ["Hyper-focus on irritant"], behavioralTendencies: ["Dismissive gestures"], healthyResponses: ["Remove the irritant"], didYouKnow: "Annoyance acts as a boundary-setting warning.", colorHex: "#FDA4AF", quadrant: "tense" },
+
+    // DISGUST FAMILY
+    { id: "disgust-repulsed", label: "Repulsed", family: "Disgust", intensity: 4, valence: -0.8, arousal: 0.7, definition: "Intense distaste or disgust.", example: "Smelling rotting food.", bodySignals: ["Gagging", "Wrinkled nose"], cognitivePatterns: ["Contamination fear"], behavioralTendencies: ["Physically backing away"], healthyResponses: ["Avoidance"], didYouKnow: "Disgust originated to protect us from pathogens.", colorHex: "#3F6212", quadrant: "tense" },
+    { id: "disgust-disapproving", label: "Disapproving", family: "Disgust", intensity: 2, valence: -0.5, arousal: 0.3, definition: "Possessing or expressing an unfavorable opinion.", example: "Hearing a bad moral joke.", bodySignals: ["Pursed lips"], cognitivePatterns: ["Judgmental"], behavioralTendencies: ["Shaking head"], healthyResponses: ["Communicate boundaries"], didYouKnow: "Disapproval is social disgust.", colorHex: "#65A30D", quadrant: "low" },
+
+    // ANTICIPATION FAMILY
+    { id: "anticip-hyper", label: "Hyper", family: "Anticipation", intensity: 3, valence: 0.6, arousal: 0.8, definition: "Unusually energetic and anticipatory.", example: "Moments before a huge event.", bodySignals: ["Jittery", "Inability to sit still"], cognitivePatterns: ["Racing future thoughts"], behavioralTendencies: ["Pacing"], healthyResponses: ["Channel energy into prep"], didYouKnow: "Hyper-anticipation is a mix of joy and baseline anxiety.", colorHex: "#EA580C", quadrant: "energized" },
+    { id: "anticip-curious", label: "Curious", family: "Anticipation", intensity: 1, valence: 0.4, arousal: 0.4, definition: "Eager to know or learn something.", example: "Reading a fascinating book.", bodySignals: ["Leaning forward", "Tilted head"], cognitivePatterns: ["Questioning", "Openness"], behavioralTendencies: ["Investigating"], healthyResponses: ["Explore"], didYouKnow: "Curiosity releases dopamine, rewarding learning.", colorHex: "#F97316", quadrant: "energized" },
+
+    // COMPLEX / NUANCED
+    { id: "complex-bittersweet", label: "Bittersweet", family: "Complex", intensity: 3, valence: 0.1, arousal: 0.2, definition: "Aroused by pleasure accompanied by suffering or regret.", example: "Graduating college and leaving friends.", bodySignals: ["Smiling with tears"], cognitivePatterns: ["Holding dual realities"], behavioralTendencies: ["Reflecting on memories"], healthyResponses: ["Savoring the complexity"], didYouKnow: "It requires high cognitive maturity to hold bittersweetness.", colorHex: "#71717A", quadrant: "calm" },
+    { id: "complex-apathetic", label: "Apathetic", family: "Complex", intensity: 3, valence: -0.4, arousal: -0.8, definition: "Showing or feeling no interest, enthusiasm, or concern.", example: "Burnout at work.", bodySignals: ["Flat affect", "Sluggishness"], cognitivePatterns: ["Why bother?"], behavioralTendencies: ["Inaction"], healthyResponses: ["Rest, seek novelty"], didYouKnow: "Prolonged apathy is often a defense mechanism against overwhelming stress.", colorHex: "#52525B", quadrant: "low" },
+    { id: "complex-nostalgic", label: "Nostalgic", family: "Complex", intensity: 2, valence: 0.3, arousal: -0.3, definition: "A sentimental longing for the past.", example: "Looking at old childhood photos.", bodySignals: ["Warmth in chest"], cognitivePatterns: ["Idealizing the past"], behavioralTendencies: ["Storytelling"], healthyResponses: ["Reconnecting with old roots"], didYouKnow: "Nostalgia historically was considered a neurological disease.", colorHex: "#A1A1AA", quadrant: "calm" }
 ];
