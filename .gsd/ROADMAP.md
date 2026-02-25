@@ -26,6 +26,7 @@
 - Ensure performance limits (pause when hidden, cap FPS) and proper reduced-motion fallbacks.
 
 ## Phase 4: Trends View
+**Status**: ✅ Complete
 **Objective:** Implement data visualizations for historical mood logs.
 - Build the scrollable Mood Timeline (valence over time).
 - Build the Emotion Heatmap Calendar (GitHub style).
