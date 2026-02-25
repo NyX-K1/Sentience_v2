@@ -34,6 +34,7 @@
 - Build the Trigger Correlation and Time-of-Day radial charts.
 
 ## Phase 5: Patterns, Insights & Crisis Engine
+**Status**: ✅ Complete
 **Objective:** Implement the rule-based insight engine and vocabulary tracking.
 - Build the Pattern Detection Engine (detecting spirals, streaks, crisis keywords).
 - Build the Insight Tiers UI (Insight, Nudge, Concern, Crisis cards).
