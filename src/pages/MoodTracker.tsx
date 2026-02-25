@@ -4,7 +4,9 @@ import MoodCompass, { Quadrant } from '../components/MoodCompass';
 import EmotionWheel from '../components/EmotionWheel';
 import EmotionBloom from '../components/EmotionBloom';
 import ContextPanel from '../components/ContextPanel';
+import BackgroundShader from '../components/BackgroundShader';
 import { EmotionFamily } from '../types/mood';
+
 
 
 const MoodTracker = () => {
@@ -50,8 +52,8 @@ const MoodTracker = () => {
 
     return (
         <div className="min-h-screen bg-black text-white relative font-mono overflow-x-hidden">
-            {/* Dynamic Background Shader Placeholder */}
-            <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 to-black pointer-events-none" />
+            {/* Dynamic Background Shader */}
+            <BackgroundShader selectedEmotionIds={selectedEmotions} />
 
             {/* Main Content Area */}
             <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden">
