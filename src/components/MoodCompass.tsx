@@ -63,8 +63,12 @@ export default function MoodCompass({ selectedQuadrant, onSelectQuadrant }: Mood
                         <div className={`absolute inset-0 bg-gradient-to-br ${q.colors} opacity-0 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none`} />
 
                         <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-4 sm:p-6">
-                            <h3 className="text-lg sm:text-xl md:text-2xl font-light tracking-wide text-white/90 group-hover:text-white transition-colors text-center w-full">{q.label}</h3>
-                            <p className="text-[10px] sm:text-xs text-white/0 group-hover:text-white/80 mt-1 sm:mt-2 transition-colors duration-300 font-sans text-center w-full leading-tight">{q.desc}</p>
+                            <h3 className="text-xl md:text-2xl font-light tracking-wide text-white/90 group-hover:text-white transition-colors text-center w-[85%] max-w-[85%] break-words hyphens-auto [word-break:break-word] leading-tight">
+                                {q.label}
+                            </h3>
+                            <p className="text-xs text-white/0 group-hover:text-white/80 mt-1 transition-colors duration-300 font-sans text-center w-[85%] max-w-[85%] break-words hyphens-auto [word-break:break-word] leading-tight">
+                                {q.desc}
+                            </p>
                         </div>
                     </motion.div>
                 ))}
