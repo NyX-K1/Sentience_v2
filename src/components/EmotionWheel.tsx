@@ -54,7 +54,7 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
                         whileTap={{ scale: 0.98 }}
                         onClick={() => onSelectFamily(family)}
                         className={`
-                            relative w-full h-32 md:h-44 rounded-2xl md:rounded-3xl
+                            relative w-full h-36 md:h-48 rounded-2xl md:rounded-3xl
                             bg-gradient-to-br ${FAMILY_COLORS[family]} 
                             flex flex-col items-center justify-end p-4 
                             overflow-hidden group border border-white/10

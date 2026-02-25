@@ -65,20 +65,26 @@ export default function ContextPanel({ onSave, onBack }: ContextPanelProps) {
                 <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">What's influencing this?</span>
                 <div className="flex flex-wrap gap-2 justify-center">
                     {DEFAULT_TRIGGERS.map(t => (
-                        <button
-                            key={t} onClick={() => toggleTrigger(t)}
-                            className={`px-4 py-2 rounded-lg text-sm transition-colors border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:text-white'}`}
+                        <motion.button
+                            key={t}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => toggleTrigger(t)}
+                            className={`px-4 py-2 rounded-lg text-sm transition-all duration-300 border ${selectedTriggers.includes(t) ? 'bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.4)]' : 'bg-white/5 border-white/10 text-white/70 hover:bg-white/20 hover:text-white hover:border-white/40'}`}
                         >
                             {t}
-                        </button>
+                        </motion.button>
                     ))}
                     {customTriggers.map(t => (
-                        <button
-                            key={`c-${t}`} onClick={() => toggleTrigger(t, true)}
-                            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors border bg-white text-black border-white`}
+                        <motion.button
+                            key={`c-${t}`}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => toggleTrigger(t, true)}
+                            className={`px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all duration-300 border bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.4)]`}
                         >
                             {t} ✕
-                        </button>
+                        </motion.button>
                     ))}
                     <input
                         type="text"
