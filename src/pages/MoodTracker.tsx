@@ -15,6 +15,7 @@ import VocabularyTracker from '../components/VocabularyTracker';
 import { usePatternDetection } from '../hooks/usePatternDetection';
 import { EmotionFamily } from '../types/mood';
 import { HeartHandshake } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 
 
@@ -69,32 +70,35 @@ const MoodTracker = () => {
             {/* Main Content Area */}
             <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden">
 
-                {/* Header & Sticky Tab Navigation */}
-                <header className="flex-shrink-0 mb-8 z-20 sticky top-0 bg-black/60 backdrop-blur-2xl pt-6 pb-4 border-b border-white/5">
-                    <div className="relative z-10 text-center">
-                        <h1 className="text-3xl md:text-4xl font-light tracking-wide mb-6">Sentience <span className="font-semibold text-cyan-400">Tracker</span></h1>
-
-                        <div className="flex space-x-2 bg-gradient-to-r from-white/5 via-white/10 to-white/5 backdrop-blur-md p-1.5 rounded-full w-full max-w-md mx-auto relative border border-white/10 shadow-2xl">
-                            {(['log', 'trends', 'patterns'] as const).map((tab) => (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`
-                                        flex-1 py-2 px-4 rounded-full text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all duration-300 relative
-                                        ${activeTab === tab ? 'text-black font-semibold' : 'text-zinc-400 hover:text-white'}
-                                    `}
-                                >
-                                    {activeTab === tab && (
-                                        <span className="absolute inset-0 bg-white rounded-full -z-10 shadow-[0_0_20px_rgba(255,255,255,0.4)]" />
-                                    )}
-                                    {tab}
-                                </button>
-                            ))}
-                        </div>
+                {/* Floating Navigation Pill */}
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-sm px-4">
+                    <div className="flex space-x-1 bg-black/40 backdrop-blur-xl p-1.5 rounded-full border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                        {(['log', 'trends', 'patterns'] as const).map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`
+                                    flex-1 py-2.5 px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-[0.2em] transition-all duration-300 relative font-medium
+                                    ${activeTab === tab ? 'text-black' : 'text-white/40 hover:text-white/80'}
+                                `}
+                            >
+                                {activeTab === tab && (
+                                    <motion.div
+                                        layoutId="activeTabBadge"
+                                        className="absolute inset-0 bg-gradient-to-r from-cyan-100 to-white rounded-full -z-10 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                    />
+                                )}
+                                <span className="relative z-10">{tab}</span>
+                            </button>
+                        ))}
                     </div>
-                </header>
+                </div>
 
-                <main className="flex-grow overflow-y-auto pb-20 scrollbar-hide relative">
+                <main className="flex-grow overflow-y-auto pt-24 pb-20 scrollbar-hide relative z-10">
+                    {/* Header Title moved into scroll area */}
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl md:text-4xl font-light tracking-widest text-white/90">TRACK<span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">ER</span></h1>
+                    </div>
                     {activeTab === 'log' && (
                         <div className="w-full flex-col flex items-center justify-center min-h-[60vh]">
                             {!quadrant && (

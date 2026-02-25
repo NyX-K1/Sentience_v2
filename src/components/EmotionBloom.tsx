@@ -35,51 +35,55 @@ export default function EmotionBloom({ family, selectedEmotionIds, onToggleEmoti
                 ← Back to Families
             </button>
 
-            <h2 className="text-2xl md:text-3xl font-light mb-8 tracking-wide text-center">
+            <h2 className="text-2xl md:text-3xl font-light mb-8 tracking-wide text-center shrink-0">
                 Can you pinpoint it?
-                <span className="block text-sm text-zinc-500 mt-2">Select one or more describing how you feel. Tap & hold for details.</span>
+                <span className="block text-sm text-zinc-500 mt-2">Select the exact emotions. Long press for definitions.</span>
             </h2>
 
-            <div className="flex flex-wrap justify-center gap-3 w-full max-w-2xl px-4 perspective-1000">
-                {sorted.map((em, i) => {
-                    const isSelected = selectedEmotionIds.includes(em.id);
-                    // Base size roughly on intensity severity
-                    const paddingSize = em.intensity === 4 ? 'px-6 py-3 text-lg' : em.intensity === 3 ? 'px-5 py-2.5 text-base' : 'px-4 py-2 text-sm';
+            {/* Scrollable List Container */}
+            <div className="w-full max-w-xl flex-grow overflow-y-auto scrollbar-hide px-4 pb-32 relative">
+                <div className="flex flex-col gap-3">
+                    {sorted.map((em, i) => {
+                        const isSelected = selectedEmotionIds.includes(em.id);
 
-                    return (
-                        <div key={em.id} className="relative group">
+                        return (
                             <motion.button
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1, transition: { delay: i * 0.05 } }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                key={em.id}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0, transition: { delay: i * 0.03 } }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={() => onToggleEmotion(em.id)}
                                 onMouseEnter={() => setHoveredEmotion(em)}
                                 onMouseLeave={() => setHoveredEmotion(null)}
                                 className={`
-                                    rounded-full border backdrop-blur-md transition-colors duration-200 font-medium tracking-wide
-                                    ${paddingSize}
+                                    w-full text-left px-6 py-4 rounded-2xl transition-all duration-300 font-medium tracking-wide flex items-center justify-between group
                                     ${isSelected
-                                        ? 'bg-white text-black border-white'
-                                        : 'bg-white/5 text-white/90 border-white/10 hover:bg-white/10 hover:border-white/30'}
+                                        ? 'bg-gradient-to-r from-white to-zinc-200 text-black shadow-lg shadow-white/10'
+                                        : 'bg-white/5 text-white/80 hover:bg-white/10 border border-white/5 hover:border-white/20'}
                                 `}
                             >
-                                {isSelected && <span className="mr-2 text-xs">✓</span>}
-                                {em.label}
+                                <div>
+                                    <span className={`text-lg block ${isSelected ? 'text-black font-semibold' : 'text-white'}`}>{em.label}</span>
+                                    {em.intensity === 4 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-rose-400'}`}>Extreme Intensity</span>}
+                                    {em.intensity === 1 && <span className={`text-xs uppercase tracking-widest mt-1 block ${isSelected ? 'text-black/60' : 'text-white/30'}`}>Mild</span>}
+                                </div>
+                                <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black text-white' : 'border-white/20 text-transparent group-hover:border-white/40'}`}>
+                                    {isSelected && <span className="text-sm">✓</span>}
+                                </div>
                             </motion.button>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
 
             {/* Floating Tooltip Component */}
             {hoveredEmotion && <EmotionTooltip emotion={hoveredEmotion} />}
 
-            {/* Action Bar */}
+            {/* Action Bar - Fixed to bottom */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: selectedEmotionIds.length > 0 ? 1 : 0, y: selectedEmotionIds.length > 0 ? 0 : 20 }}
-                className="mt-16 flex items-center gap-4"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: selectedEmotionIds.length > 0 ? 1 : 0, y: selectedEmotionIds.length > 0 ? 0 : 40 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
             >
                 <button
                     onClick={onProceed}

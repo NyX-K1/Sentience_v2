@@ -51,7 +51,6 @@ export default function EmotionWheel({ quadrant, selectedFamily, onSelectFamily,
                         key={family}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1, transition: { delay: i * 0.1 } }}
-                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={() => onSelectFamily(family)}
                         className={`
