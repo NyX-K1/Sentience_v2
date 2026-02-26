@@ -12,12 +12,11 @@ import TriggerCorrelation from '../components/TriggerCorrelation';
 import InsightCard from '../components/InsightCard';
 import CrisisCard from '../components/CrisisCard';
 import VocabularyTracker from '../components/VocabularyTracker';
+import PostSaveReflection from '../components/PostSaveReflection';
 import { usePatternDetection } from '../hooks/usePatternDetection';
 import { EmotionFamily } from '../types/mood';
 import { HeartHandshake } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-
 
 const MoodTracker = () => {
     const [activeTab, setActiveTab] = useState<'log' | 'trends' | 'patterns'>('log');
@@ -28,6 +27,10 @@ const MoodTracker = () => {
     const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
     const [showContext, setShowContext] = useState(false);
     const [forceShowCrisis, setForceShowCrisis] = useState(false);
+
+    // Post-Save Flow State
+    const [showReflection, setShowReflection] = useState(false);
+    const [justSavedEmotionIds, setJustSavedEmotionIds] = useState<string[]>([]);
 
     const { entries, addEntry } = useMoodStore();
     const insights = usePatternDetection(entries);
@@ -54,12 +57,20 @@ const MoodTracker = () => {
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
 
+        // Store saved IDs for reflection modal
+        setJustSavedEmotionIds([...selectedEmotions]);
+        setShowReflection(true);
+
         // Reset flow
         setQuadrant(null);
         setFamily(null);
         setSelectedEmotions([]);
         setShowContext(false);
-        setActiveTab('trends'); // Route to trends after save
+    };
+
+    const handleContinueFromReflection = () => {
+        setShowReflection(false);
+        setActiveTab('trends');
     };
 
     return (
@@ -196,6 +207,15 @@ const MoodTracker = () => {
                     )}
                 </main>
             </div>
+
+            {/* Post-Save Reflection Modal */}
+            {showReflection && (
+                <PostSaveReflection
+                    emotionIds={justSavedEmotionIds}
+                    onClose={() => setShowReflection(false)}
+                    onContinue={handleContinueFromReflection}
+                />
+            )}
 
             {/* Global Permanent Distress Button */}
             {!forceShowCrisis && (

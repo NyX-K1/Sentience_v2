@@ -14,6 +14,8 @@ import VoiceNotes from './pages/VoiceNotes';
 
 import EmotionalPatterns from './pages/EmotionalPatterns';
 import MoodTracker from './pages/MoodTracker';
+import ThoughtReframer from './pages/ThoughtReframer';
+import SmartJournalling2 from './pages/SmartJournalling2';
 
 const App = () => {
     return (
@@ -33,6 +35,8 @@ const App = () => {
                 <Route path="/balanced-thought" element={<BalancedThoughtPage />} />
                 <Route path="/voice-notes" element={<VoiceNotes />} />
                 <Route path="/mood-tracker" element={<MoodTracker />} />
+                <Route path="/thought-reframer" element={<ThoughtReframer />} />
+                <Route path="/smart-journalling-2" element={<SmartJournalling2 />} />
             </Routes>
         </BrowserRouter>
     );

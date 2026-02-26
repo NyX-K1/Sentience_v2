@@ -19,7 +19,8 @@ export default function SentienceLanding() {
             links: [
                 { label: "Guided Breakthroughs", ariaLabel: "Start Guided Breakthrough Session" },
                 { label: "Thoughts and Exercises", ariaLabel: "Cognitive Reframing Tools & Relaxation", href: "/cognitive-reframing" },
-                { label: "Mood Tracker", ariaLabel: "View Mood Tracker", href: "/mood-tracker" }
+                { label: "Mood Tracker", ariaLabel: "View Mood Tracker", href: "/mood-tracker" },
+                { label: "Thought Reframer", ariaLabel: "Reframe Negative Thoughts", href: "/thought-reframer" }
             ]
         },
         {
@@ -28,6 +29,7 @@ export default function SentienceLanding() {
             textColor: "#c7d2fe",
             links: [
                 { label: "Smart Journalling", ariaLabel: "Open Smart Journal", href: "/smart-journalling" },
+                { label: "Smart Journalling 2", ariaLabel: "Open Smart Journal 2", href: "/smart-journalling-2" },
                 { label: "Voice Notes", ariaLabel: "Record Voice Note", href: "/voice-notes" },
                 { label: "Templates", ariaLabel: "View Templates", href: "/smart-journal" }
             ]

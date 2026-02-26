@@ -16,6 +16,8 @@ export interface EmotionDef {
     didYouKnow: string;
     colorHex: string;
     quadrant: 'tense' | 'energized' | 'low' | 'calm';
+    subFamily?: string;
+    otherAttributes?: string;
 }
 
 export interface MoodEntry {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { MoodEntry } from '../types/mood';
 import { calculateDailyAverages } from '../utils/trendCalculations';
 
@@ -39,7 +39,15 @@ export default function MoodTimeline({ entries }: MoodTimelineProps) {
 
             <div className="w-full h-full pt-12">
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={data} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
+                    <AreaChart data={data} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id="splitColor" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
+                                <stop offset="50%" stopColor="#10b981" stopOpacity={0.1} />
+                                <stop offset="50%" stopColor="#f43f5e" stopOpacity={0.1} />
+                                <stop offset="95%" stopColor="#f43f5e" stopOpacity={0.8} />
+                            </linearGradient>
+                        </defs>
                         <XAxis
                             dataKey="date"
                             tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 11 }}
@@ -60,23 +68,25 @@ export default function MoodTimeline({ entries }: MoodTimelineProps) {
                                 return '';
                             }}
                         />
-                        <ReferenceLine y={0} stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
+                        <ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" />
                         <Tooltip
                             contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                             itemStyle={{ color: 'white' }}
                             labelStyle={{ color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}
                             formatter={(value: any) => [Math.round(Number(value) * 100) + '%', 'Valence']}
                         />
-                        <Line
+                        <Area
                             type="monotone"
                             dataKey="valence"
                             stroke="#ffffff"
                             strokeWidth={3}
+                            fillOpacity={1}
+                            fill="url(#splitColor)"
                             dot={{ fill: '#000', stroke: '#fff', strokeWidth: 2, r: 4 }}
                             activeDot={{ r: 6, fill: '#fff' }}
                             animationDuration={2000}
                         />
-                    </LineChart>
+                    </AreaChart>
                 </ResponsiveContainer>
             </div>
         </div>

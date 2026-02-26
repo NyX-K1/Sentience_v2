@@ -17,11 +17,12 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
     const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
     const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
 
-    // Filter and group selected emotions by family
+    // Filter and group selected emotions by family (and subFamily if family === 'Complex')
     const selectedEmotions = allEmotions.filter(e => selectedEmotionIds.includes(e.id));
     const groupedEmotions = selectedEmotions.reduce((acc, emotion) => {
-        if (!acc[emotion.family]) acc[emotion.family] = [];
-        acc[emotion.family].push(emotion);
+        const key = (emotion.family === 'Complex' && emotion.subFamily) ? emotion.subFamily : emotion.family;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(emotion);
         return acc;
     }, {} as Record<string, EmotionDef[]>);
     const [customTriggers, setCustomTriggers] = useState<string[]>([]);

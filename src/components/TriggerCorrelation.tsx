@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { MoodEntry } from '../types/mood';
 import { extractTriggerCorrelations } from '../utils/trendCalculations';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface TriggerCorrelationProps {
     entries: MoodEntry[];
@@ -27,51 +27,60 @@ export default function TriggerCorrelation({ entries }: TriggerCorrelationProps)
         );
     }
 
-    // Top 5 and Bottom 5 impact bounds
-    const slicedData = data.slice(0, 5).concat(data.slice(-5)).filter((v, i, a) => a.findIndex(t => (t.trigger === v.trigger)) === i).sort((a, b) => a.avgValence - b.avgValence);
+    // Sort to find biggest uplifts and drains
+    const sorted = [...data].sort((a, b) => b.avgValence - a.avgValence);
+    const uplifts = sorted.filter(t => t.avgValence > 0.1).slice(0, 5);
+    const drains = sorted.filter(t => t.avgValence < -0.1).slice(-5).reverse(); // largest negative first
 
     return (
-        <div className="w-full h-96 bg-white/5 border border-white/10 rounded-3xl p-6 relative">
+        <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 relative">
             <div className="mb-8">
-                <h3 className="text-xl font-light tracking-wide">Trigger Impact</h3>
-                <span className="text-xs text-white/50 uppercase tracking-widest mt-1 block">Average Valence by Context</span>
+                <h3 className="text-xl font-light tracking-wide">Context Impact Map</h3>
+                <span className="text-xs text-white/50 uppercase tracking-widest mt-1 block">What commonly moves your emotional baseline</span>
             </div>
 
-            <div className="w-full h-[250px]">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={slicedData} layout="vertical" margin={{ top: 0, right: 30, left: 40, bottom: 0 }}>
-                        <XAxis
-                            type="number"
-                            domain={[-1, 1]}
-                            tick={false}
-                            axisLine={false}
-                        />
-                        <YAxis
-                            type="category"
-                            dataKey="trigger"
-                            tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 11 }}
-                            axisLine={false}
-                            tickLine={false}
-                            width={100}
-                        />
-                        <Tooltip
-                            contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                            itemStyle={{ color: 'white' }}
-                            formatter={(value: any, _name: any, props: any) => [
-                                `Valence: ${Number(value).toFixed(2)} (${props.payload.count} logs)`,
-                                'Impact'
-                            ]}
-                        />
-                        <Bar dataKey="avgValence" radius={[0, 4, 4, 0]}>
-                            {slicedData.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={entry.avgValence > 0 ? '#10b981' : '#f43f5e'} // emerald vs rose
-                                />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Uplifts */}
+                <div>
+                    <div className="flex items-center gap-2 mb-4">
+                        <ArrowUpRight className="text-emerald-400 w-5 h-5" />
+                        <h4 className="text-white/80 font-medium tracking-wide">Uplifting Contexts</h4>
+                    </div>
+                    <div className="space-y-3">
+                        {uplifts.length > 0 ? uplifts.map(t => (
+                            <div key={t.trigger} className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-between">
+                                <span className="text-emerald-100 font-medium">{t.trigger}</span>
+                                <div className="text-right">
+                                    <span className="text-emerald-400 font-bold block">+{t.avgValence.toFixed(2)}</span>
+                                    <span className="text-[10px] text-emerald-400/50 uppercase tracking-widest">{t.count} logs</span>
+                                </div>
+                            </div>
+                        )) : (
+                            <div className="text-sm text-white/30 italic p-4 bg-white/5 rounded-2xl text-center">Not enough positive correlations yet.</div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Drains */}
+                <div>
+                    <div className="flex items-center gap-2 mb-4">
+                        <ArrowDownRight className="text-rose-400 w-5 h-5" />
+                        <h4 className="text-white/80 font-medium tracking-wide">Draining Contexts</h4>
+                    </div>
+                    <div className="space-y-3">
+                        {drains.length > 0 ? drains.map(t => (
+                            <div key={t.trigger} className="p-3 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center justify-between">
+                                <span className="text-rose-100 font-medium">{t.trigger}</span>
+                                <div className="text-right">
+                                    <span className="text-rose-400 font-bold block">{t.avgValence.toFixed(2)}</span>
+                                    <span className="text-[10px] text-rose-400/50 uppercase tracking-widest">{t.count} logs</span>
+                                </div>
+                            </div>
+                        )) : (
+                            <div className="text-sm text-white/30 italic p-4 bg-white/5 rounded-2xl text-center">No major negative correlations detected.</div>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

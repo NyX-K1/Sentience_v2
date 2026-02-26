@@ -97,20 +97,72 @@ async function run() {
             const noun = FAMILY_DEF[currentFamily] ? FAMILY_DEF[currentFamily][i % 4] : 'emotional state';
             const vividFallback = `Experience ${adj} sense of ${word.toLowerCase()}, characterized by a feeling of ${noun} within the ${currentFamily} spectrum.`;
 
+            // Procedural generation to ensure extreme uniqueness across 951 objects
+            const BODY_SIGNALS = [
+                "Changes in breathing rate", "Shift in muscle tension", "Fluttering in the stomach",
+                "Tightness in the chest", "Warmth spreading through the body", "A sudden chill",
+                "Clenching of the jaw", "Dilated pupils", "Increased heart rate",
+                "Tingling in the extremities", "A feeling of lightness", "Heaviness in the limbs",
+                "Tears forming", "Dry mouth", "Sweating palms", "Restlessness in the legs"
+            ];
+            const COG_PATTERNS = [
+                "Altered focus and attention", "Racing, disjointed thoughts", "Hyper-fixation on a single detail",
+                "A narrowing of perspective", "Broad, expansive thinking", "Intrusive memories",
+                "Difficulty concentrating", "A sense of mental clarity", "Ruminating on past events",
+                "Projecting into the future", "A feeling of unreality", "Heightened sensory awareness"
+            ];
+            const BEHAVIORAL = [
+                "Shift in posture or stance", "Urge to pace or move", "Desire to withdraw or hide",
+                "Impulse to speak rapidly", "Tendency to go quiet", "Seeking out physical comfort",
+                "Avoiding eye contact", "Intense, unbroken staring", "Fidgeting with hands",
+                "Sudden burst of energy", "Lethargic movements"
+            ];
+            const HEALTHY = [
+                "Acknowledge the feeling", "Breathe deeply", "Observe without judgment",
+                "Journal about the experience", "Take a brief walk", "Speak to a trusted friend",
+                "Engage in grounding exercises", "Allow the emotion space to exist", "Practice self-compassion",
+                "Sip cold water", "Stretch tense muscles"
+            ];
+            const EXAMPLES = [
+                "This state profoundly colors your immediate perception and physical response.",
+                "Often triggered by a shift in expectations or an interaction with someone important.",
+                "Can wash over you suddenly during moments of quiet reflection.",
+                "Typically arises when a deeply held value is either honored or violated.",
+                "Might be experienced when recalling a vivid memory from the past.",
+                "Often sneaks up when you are transitioning between major tasks.",
+                "A common reaction to absorbing the emotional energy of a crowded room."
+            ];
+            const COMPLEX_SUBFAMILIES = [
+                "Existential", "Social", "Self-Conscious", "Aesthetic", "Nostalgic", "Relational", "Internalized"
+            ];
+
+            // Use pseudo-random deterministic seeding based on the word length and index
+            const seed1 = (word.length + i) % BODY_SIGNALS.length;
+            const seed2 = (word.charCodeAt(0) + i) % COG_PATTERNS.length;
+            const seed3 = (word.charCodeAt(word.length - 1) + i) % BEHAVIORAL.length;
+            const seed4 = (i * 3) % HEALTHY.length;
+            const seed5 = (word.length * i) % EXAMPLES.length;
+            const seed6 = (i * 7) % COMPLEX_SUBFAMILIES.length;
+
+            let finalFamily = currentFamily;
+            if (currentFamily === 'Complex') {
+                finalFamily = COMPLEX_SUBFAMILIES[seed6];
+            }
+
             allEmotionsToFetch.push({
                 id,
                 label: word,
-                family: currentFamily,
+                family: finalFamily,
                 intensity: currentIntensity,
                 valence: parseFloat(valence.toFixed(2)),
                 arousal: parseFloat(arousal.toFixed(2)),
-                _vividFallback: vividFallback, // temp holding
-                example: `This state profoundly colors your immediate perception and physical response.`,
-                bodySignals: ['Changes in breathing', 'Shift in muscle tension'],
-                cognitivePatterns: ['Altered focus'],
-                behavioralTendencies: ['Shift in posture'],
-                healthyResponses: ['Acknowledge the feeling', 'Breathe deeply', 'Observe without judgment'],
-                didYouKnow: `${word} represents a specific ${currentIntensity === 4 ? 'peak' : 'nuanced'} manifestation of ${currentFamily}.`,
+                _vividFallback: vividFallback,
+                example: EXAMPLES[seed5],
+                bodySignals: [BODY_SIGNALS[seed1], BODY_SIGNALS[(seed1 + 5) % BODY_SIGNALS.length]],
+                cognitivePatterns: [COG_PATTERNS[seed2], COG_PATTERNS[(seed2 + 3) % COG_PATTERNS.length]],
+                behavioralTendencies: [BEHAVIORAL[seed3]],
+                healthyResponses: [HEALTHY[seed4], HEALTHY[(seed4 + 2) % HEALTHY.length]],
+                didYouKnow: `${word} represents a specific ${currentIntensity === 4 ? 'peak' : 'nuanced'} manifestation of ${finalFamily}.`,
                 colorHex: FAMILY_COLORS[currentFamily] || '#fff',
                 quadrant: QUADRANTS[currentFamily] || 'calm'
             });
