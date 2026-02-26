@@ -17,7 +17,7 @@ import EvidenceScale from '../components/thought-reframer/EvidenceScale';
 import ReframeStep from '../components/thought-reframer/ReframeStep';
 import ShiftStep from '../components/thought-reframer/ShiftStep';
 import TakeawayStep from '../components/thought-reframer/TakeawayStep';
-import NeuralBackground from '../components/ui/flow-field-background';
+import ShaderBackground from '../components/ui/shader-background';
 
 type View = 'landing' | 'session' | 'history' | 'completed';
 
@@ -86,7 +86,7 @@ export default function ThoughtReframer() {
             <div className="min-h-screen bg-gradient-to-br from-slate-950 via-zinc-950 to-violet-950 text-white relative overflow-hidden">
                 {/* Calming Neural Shader */}
                 <div className="fixed inset-0 z-0 opacity-40">
-                    <NeuralBackground color="#6366f1" particleCount={300} speed={0.5} trailOpacity={0.08} />
+                    <ShaderBackground />
                 </div>
                 {/* Ambient orbs */}
                 <div className="absolute top-20 left-10 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
@@ -308,7 +308,7 @@ export default function ThoughtReframer() {
         <div className={`min-h-screen bg-gradient-to-br ${ambientColors[session.currentStep] || ambientColors[1]} text-white transition-colors duration-1000 relative`}>
             {/* Calming Neural Shader */}
             <div className="fixed inset-0 z-0 opacity-30 pointer-events-none">
-                <NeuralBackground color="#6366f1" particleCount={200} speed={0.3} trailOpacity={0.06} />
+                <ShaderBackground />
             </div>
             {/* Ambient Particles */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">

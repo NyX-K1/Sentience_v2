@@ -130,26 +130,12 @@ export default function CardNav({
         <div ref={containerRef} className="fixed top-0 left-0 w-full z-50 font-sans">
             {/* Top Bar */}
             <div
-                className="relative z-50 px-6 py-4 flex justify-between items-center transition-colors duration-300"
-                style={{ color: isOpen ? '#fff' : '#fff' }} // Always white/light for Sentience
+                className="relative z-50 px-6 py-4 flex justify-end items-center transition-colors duration-300 pointer-events-none"
             >
-                {/* Logo */}
-                <div className="flex items-center gap-3">
-                    {logo ? (
-                        <img src={logo} alt={logoAlt} className="h-8 w-auto" />
-                    ) : (
-                        // Fallback Logo if image not provided
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-500 to-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.3)]" />
-                            <span className="font-bold text-lg tracking-wider text-white">SENTIENCE</span>
-                        </div>
-                    )}
-                </div>
-
                 {/* Toggle Button */}
                 <button
                     onClick={() => handleOpenChange(!isOpen)}
-                    className="rounded-full px-6 py-2 flex items-center gap-2 font-medium tracking-wide transition-transform hover:scale-105 active:scale-95"
+                    className="rounded-full px-6 py-2 flex items-center gap-2 font-medium tracking-wide transition-transform hover:scale-105 active:scale-95 pointer-events-auto"
                     style={{
                         backgroundColor: buttonBgColor,
                         color: buttonTextColor,

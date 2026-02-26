@@ -108,10 +108,9 @@ const ShaderBackground = () => {
   `;
 
   // Helper function to compile shader
-  const loadShader = (gl: WebGLRenderingContext, type: number, source: string): WebGLShader | null => {
+  const loadShader = (gl: WebGLRenderingContext, type: number, source: string) => {
     const shader = gl.createShader(type);
     if (!shader) return null;
-
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
 
@@ -125,7 +124,7 @@ const ShaderBackground = () => {
   };
 
   // Initialize shader program
-  const initShaderProgram = (gl: WebGLRenderingContext, vsSource: string, fsSource: string): WebGLProgram | null => {
+  const initShaderProgram = (gl: WebGLRenderingContext, vsSource: string, fsSource: string) => {
     const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
     const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
@@ -189,8 +188,8 @@ const ShaderBackground = () => {
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    let startTime = Date.now();
-    let animationId: number;
+    const startTime = Date.now();
+    let animationFrameId: number;
 
     const render = () => {
       const currentTime = (Date.now() - startTime) / 1000;
@@ -200,8 +199,13 @@ const ShaderBackground = () => {
 
       gl.useProgram(programInfo.program);
 
-      gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
-      gl.uniform1f(programInfo.uniformLocations.time, currentTime);
+      // Only run uniform setting if the locations exist
+      if (programInfo.uniformLocations.resolution) {
+        gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
+      }
+      if (programInfo.uniformLocations.time) {
+        gl.uniform1f(programInfo.uniformLocations.time, currentTime);
+      }
 
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
       gl.vertexAttribPointer(
@@ -215,19 +219,19 @@ const ShaderBackground = () => {
       gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animationId = requestAnimationFrame(render);
+      animationFrameId = requestAnimationFrame(render);
     };
 
-    animationId = requestAnimationFrame(render);
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      cancelAnimationFrame(animationId);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
-    <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10" />
+    <canvas ref={canvasRef} className="fixed top-0 left-0 w-full h-full -z-10 object-cover" />
   );
 };
 

@@ -13,6 +13,7 @@ import InsightCard from '../components/InsightCard';
 import CrisisCard from '../components/CrisisCard';
 import VocabularyTracker from '../components/VocabularyTracker';
 import PostSaveReflection from '../components/PostSaveReflection';
+import Ballpit from '../components/Ballpit';
 import { usePatternDetection } from '../hooks/usePatternDetection';
 import { EmotionFamily } from '../types/mood';
 import { HeartHandshake } from 'lucide-react';
@@ -78,11 +79,23 @@ const MoodTracker = () => {
             {/* Dynamic Background Shader */}
             <BackgroundShader selectedEmotionIds={selectedEmotions} />
 
+            {/* Ballpit Interactive Background */}
+            <div className="fixed inset-0 z-0 pointer-events-auto opacity-50" style={{ position: 'fixed', overflow: 'hidden', minHeight: '100vh', width: '100%' }}>
+                <Ballpit
+                    count={240}
+                    gravity={0.1}
+                    friction={0.9975}
+                    wallBounce={0.95}
+                    followCursor={false}
+                    colors={[0x0c4a6e, 0x0284c7, 0x38bdf8, 0x818cf8, 0x4f46e5, 0x2e1065]}
+                />
+            </div>
+
             {/* Main Content Area */}
-            <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden">
+            <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden pointer-events-none">
 
                 {/* Floating Navigation Pill */}
-                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-sm px-4">
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-sm px-4 pointer-events-auto">
                     <div className="flex space-x-1 bg-black/40 backdrop-blur-xl p-1.5 rounded-full border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
                         {(['log', 'trends', 'patterns'] as const).map((tab) => (
                             <button
@@ -105,7 +118,7 @@ const MoodTracker = () => {
                     </div>
                 </div>
 
-                <main className="flex-grow overflow-y-auto pt-24 pb-20 scrollbar-hide relative z-10">
+                <main className="flex-grow overflow-y-auto pt-24 pb-20 scrollbar-hide relative z-10 pointer-events-auto">
                     {/* Header Title moved into scroll area */}
                     <div className="text-center mb-8">
                         <h1 className="text-3xl md:text-4xl font-light tracking-widest text-white/90">TRACK<span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">ER</span></h1>

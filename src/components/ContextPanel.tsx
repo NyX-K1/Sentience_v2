@@ -60,7 +60,7 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
 
             {/* Selected Emotions Overview */}
             {selectedEmotions.length > 0 && (
-                <div className="mb-10 w-full max-w-xl mx-auto relative">
+                <div className="mb-10 w-full max-w-xl mx-auto relative bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
                     <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">Selected Emotions</span>
                     <div className="flex flex-col gap-4">
                         {Object.entries(groupedEmotions).map(([family, ems]) => (
@@ -97,23 +97,26 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
             )}
 
             {/* Intensity Slider */}
-            <div className="mb-10 w-full max-w-md mx-auto">
-                <div className="flex justify-between text-xs text-white/50 uppercase tracking-widest mb-4">
-                    <span>Barely There (1)</span>
-                    <span className="text-white font-medium text-lg">{intensity}</span>
-                    <span>Overwhelming (10)</span>
+            <div className="mb-10 w-full max-w-xl mx-auto bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
+                <span className="text-xs text-white/50 uppercase tracking-widest block mb-6 text-center">Emotional Intensity</span>
+                <div className="max-w-md mx-auto">
+                    <div className="flex justify-between text-xs text-white/50 uppercase tracking-widest mb-4">
+                        <span>Barely There (1)</span>
+                        <span className="text-white font-medium text-lg">{intensity}</span>
+                        <span>Overwhelming (10)</span>
+                    </div>
+                    <input
+                        type="range"
+                        min="1" max="10"
+                        value={intensity}
+                        onChange={(e) => setIntensity(Number(e.target.value))}
+                        className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                    />
                 </div>
-                <input
-                    type="range"
-                    min="1" max="10"
-                    value={intensity}
-                    onChange={(e) => setIntensity(Number(e.target.value))}
-                    className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
-                />
             </div>
 
             {/* Triggers */}
-            <div className="mb-10 w-full max-w-xl mx-auto">
+            <div className="mb-10 w-full max-w-xl mx-auto bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
                 <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">What's influencing this?</span>
                 <div className="flex flex-wrap gap-2 justify-center">
                     {DEFAULT_TRIGGERS.map(t => (
@@ -150,7 +153,7 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
             </div>
 
             {/* Note */}
-            <div className="mb-10 w-full max-w-xl mx-auto">
+            <div className="mb-10 w-full max-w-xl mx-auto bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl">
                 <span className="text-xs text-white/50 uppercase tracking-widest block mb-4 text-center">Quick Note</span>
                 <textarea
                     value={note}
