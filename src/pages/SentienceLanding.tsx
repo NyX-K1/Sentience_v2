@@ -476,8 +476,8 @@ export default function SentienceLanding() {
                         <button
                             onClick={() => handleStoryChoice(true)}
                             className={`px-10 py-3.5 rounded-full border transition-all duration-500 uppercase tracking-[0.3em] text-[10px] font-medium ${showStory === true
-                                    ? 'border-cyan-400/40 bg-cyan-400/10 text-white/80 shadow-[0_0_30px_rgba(34,211,238,0.1)]'
-                                    : 'border-white/8 text-white/25 hover:border-white/15 hover:text-white/40 hover:bg-white/[0.03]'
+                                ? 'border-cyan-400/40 bg-cyan-400/10 text-white/80 shadow-[0_0_30px_rgba(34,211,238,0.1)]'
+                                : 'border-white/8 text-white/25 hover:border-white/15 hover:text-white/40 hover:bg-white/[0.03]'
                                 }`}
                         >
                             Enter
@@ -485,8 +485,8 @@ export default function SentienceLanding() {
                         <button
                             onClick={() => handleStoryChoice(false)}
                             className={`px-10 py-3.5 rounded-full border transition-all duration-500 uppercase tracking-[0.3em] text-[10px] font-medium ${showStory === false
-                                    ? 'border-white/15 bg-white/5 text-white/50'
-                                    : 'border-white/5 text-white/15 hover:border-white/10 hover:text-white/25'
+                                ? 'border-white/15 bg-white/5 text-white/50'
+                                : 'border-white/5 text-white/15 hover:border-white/10 hover:text-white/25'
                                 }`}
                         >
                             Skip

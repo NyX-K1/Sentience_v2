@@ -107,21 +107,6 @@ export default function PinRotateCards() {
         <div ref={containerRef} className="w-full bg-[#050505] text-white overflow-hidden perspective-[1000px]">
 
             {/* Intro Section */}
-            <section className="h-screen flex flex-col justify-center items-center px-6 md:px-20 text-center relative z-20 bg-[#050505]">
-                <h2 className="text-4xl md:text-7xl font-extralight tracking-wide flex items-center justify-center flex-wrap gap-4 uppercase mb-8">
-                    Essential <span className="font-medium text-cyan-400 flex items-center gap-3">
-                        Concepts
-                        <svg className="w-8 h-8 md:w-12 md:h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </span>
-                </h2>
-                <p className="max-w-3xl text-lg md:text-2xl text-neutral-400 font-light leading-relaxed">
-                    Understand the psychology behind your emotions. These core tenets of mental well-being
-                    will equip you mapping your cognitive landscape.
-                </p>
-            </section>
-
             {/* Pinned Rotating Cards */}
             {topics.map((topic, index) => (
                 <section

@@ -10,6 +10,7 @@ import { COGNITIVE_DISTORTIONS } from '../data/distortions';
 import { emotions as EMOTION_DB } from '../data/emotions';
 import DistortionIcon from '../components/thought-reframer/DistortionIcon';
 import NeuralBackground from '../components/ui/flow-field-background';
+import JournalStories from '../components/JournalStories';
 
 // ─── Types ───
 interface DeepAnalysis {
@@ -56,6 +57,8 @@ export default function SmartJournalling2() {
     const [isConvoLoading, setIsConvoLoading] = useState(false);
     const convoInputRef = useRef<HTMLTextAreaElement>(null);
     const MAX_EXCHANGES = 3;
+    const [writeMode, setWriteMode] = useState<'freewrite' | 'stories'>('freewrite');
+    const [activeStoryTitle, setActiveStoryTitle] = useState<string | null>(null);
 
     // Date
     const now = new Date();
@@ -256,67 +259,120 @@ Continue the therapeutic conversation naturally. Be warm, specific, and gently g
                                 )}
                             </div>
 
-                            {/* Writing Prompts */}
-                            <div className="mb-6">
-                                <span className="text-[10px] text-white/20 uppercase tracking-[0.2em] block mb-3">Need a starting point?</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {WRITING_PROMPTS.map((prompt, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => {
-                                                setActivePrompt(i);
-                                                setJournalText(prev => {
-                                                    const trimmed = prev.trim();
-                                                    return trimmed ? `${trimmed}\n\n${prompt}\n` : `${prompt}\n`;
-                                                });
-                                                textareaRef.current?.focus();
-                                            }}
-                                            className={`px-3 py-1.5 rounded-full text-xs border transition-all ${activePrompt === i
-                                                ? 'bg-white/10 border-white/20 text-white/70'
-                                                : 'bg-white/3 border-white/8 text-white/30 hover:bg-white/8 hover:text-white/50'
+                            {/* Tab switcher: Freewrite / Stories */}
+                            <div className="flex gap-1 mb-6 bg-white/[0.03] border border-white/8 rounded-full p-1 w-fit">
+                                <button
+                                    onClick={() => setWriteMode('freewrite')}
+                                    className={`px-5 py-2 rounded-full text-[10px] uppercase tracking-[0.25em] font-medium transition-all duration-300 ${writeMode === 'freewrite' ? 'bg-white/10 text-white/70' : 'text-white/20 hover:text-white/35'
+                                        }`}
+                                >
+                                    Freewrite
+                                </button>
+                                <button
+                                    onClick={() => setWriteMode('stories')}
+                                    className={`px-5 py-2 rounded-full text-[10px] uppercase tracking-[0.25em] font-medium transition-all duration-300 ${writeMode === 'stories' ? 'bg-white/10 text-white/70' : 'text-white/20 hover:text-white/35'
+                                        }`}
+                                >
+                                    Story Templates
+                                </button>
+                            </div>
+
+                            {/* Stories blur slider */}
+                            {writeMode === 'stories' && (
+                                <div className="mb-8">
+                                    <JournalStories
+                                        onSelectStory={(prompt, title) => {
+                                            setJournalText(prev => {
+                                                const trimmed = prev.trim();
+                                                return trimmed ? `${trimmed}\n\n${prompt}\n` : `${prompt}\n`;
+                                            });
+                                            setActiveStoryTitle(title);
+                                            setWriteMode('freewrite');
+                                            setTimeout(() => textareaRef.current?.focus(), 100);
+                                        }}
+                                    />
+                                </div>
+                            )}
+
+                            {/* Active story indicator */}
+                            {activeStoryTitle && writeMode === 'freewrite' && (
+                                <div className="mb-4 flex items-center gap-2">
+                                    <span className="text-[9px] uppercase tracking-[0.2em] text-white/15">Writing from:</span>
+                                    <span className="text-[10px] text-white/35 font-light italic">{activeStoryTitle}</span>
+                                    <button
+                                        onClick={() => setActiveStoryTitle(null)}
+                                        className="text-white/15 hover:text-white/30 text-[10px] ml-1"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Writing Prompts — only in freewrite mode */}
+                            {writeMode === 'freewrite' && (
+                                <div className="mb-6">
+                                    <span className="text-[10px] text-white/20 uppercase tracking-[0.2em] block mb-3">Need a starting point?</span>
+                                    <div className="flex flex-wrap gap-2">
+                                        {WRITING_PROMPTS.map((prompt, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => {
+                                                    setActivePrompt(i);
+                                                    setJournalText(prev => {
+                                                        const trimmed = prev.trim();
+                                                        return trimmed ? `${trimmed}\n\n${prompt}\n` : `${prompt}\n`;
+                                                    });
+                                                    textareaRef.current?.focus();
+                                                }}
+                                                className={`px-3 py-1.5 rounded-full text-xs border transition-all ${activePrompt === i
+                                                    ? 'bg-white/10 border-white/20 text-white/70'
+                                                    : 'bg-white/3 border-white/8 text-white/30 hover:bg-white/8 hover:text-white/50'
+                                                    }`}
+                                            >
+                                                {prompt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Main Textarea — only in freewrite mode */}
+                            {writeMode === 'freewrite' && (
+                                <div className="relative">
+                                    <textarea
+                                        ref={textareaRef}
+                                        value={journalText}
+                                        onChange={e => setJournalText(e.target.value)}
+                                        placeholder="Write freely. No judgment, no filter — just you and your thoughts..."
+                                        className="w-full min-h-[300px] bg-black/20 backdrop-blur-xl border border-white/8 rounded-3xl p-8 text-base md:text-lg leading-relaxed text-white/85 placeholder:text-white/15 focus:outline-none focus:border-white/15 transition-all resize-none"
+                                    />
+
+                                    {/* Character count & button */}
+                                    <div className="flex items-center justify-between mt-3 px-2">
+                                        <span className="text-[10px] text-white/15 font-mono">
+                                            {journalText.length > 0 ? `${journalText.length} characters` : ''}
+                                        </span>
+                                        <motion.button
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={handleAnalyze}
+                                            disabled={isAnalyzing || journalText.trim().length < 30}
+                                            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${isAnalyzing
+                                                ? 'bg-white/10 text-white/40 cursor-wait'
+                                                : journalText.trim().length < 30
+                                                    ? 'bg-white/5 text-white/15 cursor-not-allowed'
+                                                    : 'bg-white text-black hover:bg-zinc-100 shadow-[0_0_30px_rgba(255,255,255,0.1)]'
                                                 }`}
                                         >
-                                            {prompt}
-                                        </button>
-                                    ))}
+                                            {isAnalyzing ? (
+                                                <><Loader2 size={14} className="animate-spin" /> Reflecting...</>
+                                            ) : (
+                                                <><Send size={14} /> Reflect & Analyze</>
+                                            )}
+                                        </motion.button>
+                                    </div>
                                 </div>
-                            </div>
-
-                            {/* Main Textarea */}
-                            <div className="relative">
-                                <textarea
-                                    ref={textareaRef}
-                                    value={journalText}
-                                    onChange={e => setJournalText(e.target.value)}
-                                    placeholder="Write freely. No judgment, no filter — just you and your thoughts..."
-                                    className="w-full min-h-[300px] bg-black/20 backdrop-blur-xl border border-white/8 rounded-3xl p-8 text-base md:text-lg leading-relaxed text-white/85 placeholder:text-white/15 focus:outline-none focus:border-white/15 transition-all resize-none"
-                                />
-
-                                {/* Character count & button */}
-                                <div className="flex items-center justify-between mt-3 px-2">
-                                    <span className="text-[10px] text-white/15 font-mono">
-                                        {journalText.length > 0 ? `${journalText.length} characters` : ''}
-                                    </span>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={handleAnalyze}
-                                        disabled={isAnalyzing || journalText.trim().length < 30}
-                                        className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${isAnalyzing
-                                            ? 'bg-white/10 text-white/40 cursor-wait'
-                                            : journalText.trim().length < 30
-                                                ? 'bg-white/5 text-white/15 cursor-not-allowed'
-                                                : 'bg-white text-black hover:bg-zinc-100 shadow-[0_0_30px_rgba(255,255,255,0.1)]'
-                                            }`}
-                                    >
-                                        {isAnalyzing ? (
-                                            <><Loader2 size={14} className="animate-spin" /> Reflecting...</>
-                                        ) : (
-                                            <><Send size={14} /> Reflect & Analyze</>
-                                        )}
-                                    </motion.button>
-                                </div>
-                            </div>
+                            )}
                         </motion.div>
                     )}
 
@@ -419,8 +475,8 @@ Continue the therapeutic conversation naturally. Be warm, specific, and gently g
                                                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                             >
                                                 <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
-                                                        ? 'bg-white/10 text-white/70 rounded-br-sm'
-                                                        : 'bg-white/5 border border-white/8 text-white/55 rounded-bl-sm'
+                                                    ? 'bg-white/10 text-white/70 rounded-br-sm'
+                                                    : 'bg-white/5 border border-white/8 text-white/55 rounded-bl-sm'
                                                     }`}>
                                                     {msg.content}
                                                 </div>
