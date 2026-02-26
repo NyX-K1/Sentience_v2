@@ -7,15 +7,15 @@ export interface EmotionDef {
     intensity: 1 | 2 | 3 | 4;
     valence: number;
     arousal: number;
-    definition: string;
-    example: string;
-    bodySignals: string[];
-    cognitivePatterns: string[];
-    behavioralTendencies: string[];
-    healthyResponses: string[];
-    didYouKnow: string;
     colorHex: string;
     quadrant: 'tense' | 'energized' | 'low' | 'calm';
+    definition?: string;
+    example?: string;
+    bodySignals?: string[];
+    cognitivePatterns?: string[];
+    behavioralTendencies?: string[];
+    healthyResponses?: string[];
+    didYouKnow?: string;
     subFamily?: string;
     otherAttributes?: string;
 }

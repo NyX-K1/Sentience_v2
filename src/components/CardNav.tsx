@@ -33,8 +33,6 @@ interface CardNavProps {
 }
 
 export default function CardNav({
-    logo,
-    logoAlt,
     items,
     menuColor,
     buttonBgColor,
