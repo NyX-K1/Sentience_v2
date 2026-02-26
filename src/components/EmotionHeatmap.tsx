@@ -51,7 +51,7 @@ export default function EmotionHeatmap({ entries }: EmotionHeatmapProps) {
     };
 
     return (
-        <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 relative">
+        <div className="w-full bg-black/40 backdrop-blur-xl border border-white/15 rounded-3xl p-6 relative shadow-2xl">
             <div className="mb-6">
                 <h3 className="text-xl font-light tracking-wide">Consistency Map</h3>
                 <span className="text-xs text-white/50 uppercase tracking-widest mt-1 block">Past 4 Weeks</span>

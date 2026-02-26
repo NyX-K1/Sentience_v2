@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Plus, Clock, Brain, BarChart3, Trash2, Heart, Phone } from 'lucide-react';
+import { ArrowLeft, Clock, Trash2, Heart, Phone, Check, Layers } from 'lucide-react';
 import { useReframerSession } from '../hooks/useReframerSession';
 import { useReframerHistory } from '../hooks/useReframerHistory';
 import { COGNITIVE_DISTORTIONS } from '../data/distortions';
@@ -103,15 +103,14 @@ export default function ThoughtReframer() {
                 <div className="max-w-3xl mx-auto px-4 pt-28 pb-16 relative z-10">
                     {/* Hero */}
                     <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/50 mb-6 font-medium tracking-widest uppercase">
-                            <Brain size={12} />
-                            CBT Exercise
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-xs text-white/40 mb-6 tracking-[0.2em] uppercase">
+                            Guided CBT Exercise
                         </div>
                         <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white via-white/80 to-white/40">
                             Thought Reframer
                         </h1>
-                        <p className="text-white/40 text-lg max-w-lg mx-auto">
-                            See your thoughts through a clearer lens. An 8-step guided exercise grounded in Cognitive Behavioral Therapy.
+                        <p className="text-white/35 text-lg max-w-md mx-auto leading-relaxed">
+                            See your thoughts through a clearer lens. 8 guided steps grounded in cognitive behavioral therapy.
                         </p>
                     </motion.div>
 
@@ -137,41 +136,42 @@ export default function ThoughtReframer() {
                     </AnimatePresence>
 
                     {/* CTA */}
-                    <div className="flex flex-col sm:flex-row gap-3 mb-12">
+                    <div className="flex flex-col sm:flex-row gap-3 mb-14">
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleStartNewSession}
-                            className="flex-1 px-8 py-5 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-500/20 flex items-center justify-center gap-3 text-lg"
+                            className="flex-1 px-8 py-5 bg-white text-black font-medium rounded-full transition-all shadow-[0_0_40px_rgba(255,255,255,0.1)] flex items-center justify-center gap-3 text-sm uppercase tracking-widest hover:bg-zinc-100"
                         >
-                            <Plus size={20} />
                             New Session
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => { refresh(); setView('history'); }}
-                            className="px-8 py-5 bg-white/5 border border-white/10 text-white/60 font-medium rounded-2xl hover:bg-white/10 transition-all flex items-center justify-center gap-3"
+                            className="px-8 py-5 bg-white/5 border border-white/10 text-white/50 rounded-full hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm uppercase tracking-widest"
                         >
-                            <BarChart3 size={18} />
+                            <Layers size={16} />
                             Past Sessions ({sessions.length})
                         </motion.button>
                     </div>
 
-                    {/* How It Works */}
-                    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8">
-                        <h3 className="text-lg font-bold text-white/80 mb-6">How it works</h3>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {/* How It Works — Clean step flow */}
+                    <div className="bg-black/30 backdrop-blur-xl border border-white/8 rounded-3xl p-8">
+                        <h3 className="text-[10px] text-white/30 uppercase tracking-[0.3em] mb-8 text-center">The 8-Step Process</h3>
+                        <div className="flex flex-col gap-4">
                             {[
-                                { step: '1-2', icon: '📍💭', label: 'Capture', desc: 'Situation & Thought' },
-                                { step: '3-4', icon: '🫀🔍', label: 'Identify', desc: 'Emotions & Distortions' },
-                                { step: '5-6', icon: '⚖️🔄', label: 'Examine', desc: 'Evidence & Reframe' },
-                                { step: '7-8', icon: '📊✨', label: 'Transform', desc: 'Shift & Takeaway' },
+                                { steps: '1 → 2', label: 'Capture', desc: 'Describe the situation and identify the automatic thought' },
+                                { steps: '3 → 4', label: 'Identify', desc: 'Check in with your emotions and detect cognitive distortions' },
+                                { steps: '5 → 6', label: 'Examine', desc: 'Weigh the evidence and craft a balanced reframe' },
+                                { steps: '7 → 8', label: 'Transform', desc: 'Measure your belief shift and take away a growth insight' },
                             ].map(item => (
-                                <div key={item.step} className="text-center p-4 bg-white/5 rounded-2xl border border-white/5">
-                                    <p className="text-2xl mb-2">{item.icon}</p>
-                                    <p className="text-sm font-bold text-white/70">{item.label}</p>
-                                    <p className="text-xs text-white/30 mt-1">{item.desc}</p>
+                                <div key={item.steps} className="flex items-start gap-4 p-3 rounded-xl hover:bg-white/3 transition-colors">
+                                    <span className="text-[10px] text-white/20 uppercase tracking-widest mt-1 shrink-0 w-12">{item.steps}</span>
+                                    <div>
+                                        <p className="text-sm font-medium text-white/70">{item.label}</p>
+                                        <p className="text-xs text-white/30 mt-0.5 leading-relaxed">{item.desc}</p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -288,15 +288,15 @@ export default function ThoughtReframer() {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                        className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full mb-6 shadow-lg shadow-violet-500/30"
+                        className="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full mb-6 shadow-[0_0_40px_rgba(255,255,255,0.1)]"
                     >
-                        <span className="text-3xl">✨</span>
+                        <Check className="w-8 h-8 text-white/80" />
                     </motion.div>
-                    <h2 className="text-3xl font-bold mb-3">Session Saved!</h2>
-                    <p className="text-white/40 mb-8 max-w-sm mx-auto">Your progress has been recorded. Every session strengthens your cognitive flexibility.</p>
+                    <h2 className="text-3xl font-light tracking-wide mb-3">Session Complete</h2>
+                    <p className="text-white/35 mb-8 max-w-sm mx-auto text-sm leading-relaxed">Your progress has been recorded. Every session strengthens your cognitive flexibility.</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button onClick={handleStartNewSession} className="px-8 py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 rounded-2xl font-bold shadow-lg">Start Another</button>
-                        <button onClick={() => setView('landing')} className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl font-medium text-white/60">Back to Menu</button>
+                        <button onClick={handleStartNewSession} className="px-8 py-4 bg-white text-black rounded-full font-medium text-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]">Start Another</button>
+                        <button onClick={() => setView('landing')} className="px-8 py-4 bg-white/5 border border-white/10 rounded-full text-white/50 text-sm uppercase tracking-widest hover:bg-white/10 transition-colors">Back to Menu</button>
                     </div>
                 </motion.div>
             </div>
