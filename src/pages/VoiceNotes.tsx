@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Settings, X, Flame, CloudRain, Moon, Zap, StopCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, Settings, X, Flame, CloudRain, Moon, Zap, StopCircle, AlertTriangle, Loader2, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Groq from 'groq-sdk';
 import AuroraBorealisShader from "@/components/ui/aurora-borealis-shader";
@@ -208,14 +208,26 @@ export default function VoiceNotes() {
 
             {/* Navigation */}
             <nav className="relative z-20 w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-                <Link
-                    to="/sentience"
-                    className="flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
-                >
-                    <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
-                        <ArrowLeft size={20} />
-                    </div>
-                </Link>
+                <div className="flex gap-4">
+                    <Link
+                        to="/sentience"
+                        className="flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
+                        title="Back to Sentience"
+                    >
+                        <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                            <ArrowLeft size={20} />
+                        </div>
+                    </Link>
+                    <Link
+                        to="/"
+                        className="flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
+                        title="Return to Home"
+                    >
+                        <div className="p-2 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                            <Home size={20} />
+                        </div>
+                    </Link>
+                </div>
 
                 <button
                     onClick={() => setShowSettings(true)}

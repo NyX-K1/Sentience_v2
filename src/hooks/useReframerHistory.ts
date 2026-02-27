@@ -1,36 +1,97 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ThoughtReframerSession } from '../types/reframer';
-
-const HISTORY_KEY = 'sentience_reframer_history';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export const useReframerHistory = () => {
+    const { user } = useAuth();
     const [sessions, setSessions] = useState<ThoughtReframerSession[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    useEffect(() => {
+    const refresh = useCallback(async () => {
+        if (!user) {
+            setSessions([]);
+            setIsLoaded(true);
+            return;
+        }
+
         try {
-            const stored = localStorage.getItem(HISTORY_KEY);
-            if (stored) {
-                setSessions(JSON.parse(stored));
+            const { data, error } = await supabase
+                .from('thought_reframing_sessions')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching reframing sessions:', error);
+                return;
             }
-        } catch { /* ignore */ }
-        setIsLoaded(true);
-    }, []);
 
-    const deleteSession = useCallback((id: string) => {
-        setSessions(prev => {
-            const updated = prev.filter(s => s.id !== id);
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
-            return updated;
-        });
-    }, []);
+            if (data) {
+                // Map the database rows back to the shape expected by the frontend
+                const mappedSessions: ThoughtReframerSession[] = data.map(row => ({
+                    id: row.id,
+                    createdAt: row.created_at,
+                    updatedAt: row.created_at, // Missing in DB, using created_at
+                    currentStep: 8,
+                    isComplete: true,
+                    situation: row.situation_description || '',
+                    situationDate: row.situation_date || undefined,
+                    contextTags: row.context_tags || [],
+                    automaticThought: row.automatic_thought || '',
+                    initialBelief: row.initial_belief || 50,
+                    initialEmotions: row.initial_emotions || [],
+                    // Approximate mapping back from string array to { region, sensation } if needed
+                    bodyMapRegions: row.physical_sensations?.map((s: string) => {
+                        const parts = s.split(': ');
+                        return { region: parts[0] || '', sensation: parts[1] || '' };
+                    }) || [],
+                    identifiedDistortions: row.cognitive_distortions || [],
+                    evidenceFor: row.evidence_supporting ? row.evidence_supporting.split('\n') : [],
+                    evidenceAgainst: row.evidence_against ? row.evidence_against.split('\n') : [],
+                    reframedThoughts: row.brainstormed_alternatives || [],
+                    selectedReframe: row.selected_reframe || '',
+                    finalBelief: row.final_belief || 50,
+                    finalEmotions: row.final_emotions || [],
+                    beliefShift: row.belief_shift || 0,
+                    personalTakeaway: row.takeaway || undefined,
+                    copingSuggestions: row.coping_strategies || [],
+                    durationMinutes: row.duration_minutes || undefined,
+                    source: 'manual'
+                }));
+                setSessions(mappedSessions);
+            }
+        } catch (err) {
+            console.error('Unexpected error fetching sessions:', err);
+        } finally {
+            setIsLoaded(true);
+        }
+    }, [user]);
 
-    const refresh = useCallback(() => {
+    useEffect(() => {
+        refresh();
+    }, [refresh]);
+
+    const deleteSession = useCallback(async (id: string) => {
+        if (!user) return;
+
         try {
-            const stored = localStorage.getItem(HISTORY_KEY);
-            if (stored) setSessions(JSON.parse(stored));
-        } catch { /* ignore */ }
-    }, []);
+            const { error } = await supabase
+                .from('thought_reframing_sessions')
+                .delete()
+                .eq('id', id)
+                .eq('user_id', user.id);
+
+            if (error) {
+                console.error('Error deleting reframing session:', error);
+                return;
+            }
+
+            setSessions(prev => prev.filter(s => s.id !== id));
+        } catch (err) {
+            console.error('Unexpected error deleting session:', err);
+        }
+    }, [user]);
 
     // Analytics
     const analytics = {

@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { EmotionDef } from '../types/mood';
-import { X, ArrowRight } from 'lucide-react';
+import { X, ArrowRight, Home } from 'lucide-react';
 import { emotions as allEmotions } from '../data/emotions';
 import { useEmotionInsights } from '../hooks/useEmotionInsights';
+import { useNavigate } from 'react-router-dom';
 
 interface PostSaveReflectionProps {
     emotionIds: string[];
@@ -99,6 +100,8 @@ function ReflectionCard({ emotion }: { emotion: EmotionDef }) {
 }
 
 export default function PostSaveReflection({ emotionIds, onClose, onContinue }: PostSaveReflectionProps) {
+    const navigate = useNavigate();
+
     // Get full EmotionDef objects for the saved IDs
     const savedEmotions = emotionIds
         .map(id => allEmotions.find(e => e.id === id))
@@ -138,13 +141,20 @@ export default function PostSaveReflection({ emotionIds, onClose, onContinue }: 
                     </div>
 
                     {/* Footer / CTA */}
-                    <div className="p-6 border-t border-white/5 bg-zinc-900/50 backdrop-blur-md">
+                    <div className="p-6 border-t border-white/5 bg-zinc-900/50 backdrop-blur-md flex flex-col gap-3">
                         <button
                             onClick={onContinue}
                             className="w-full py-4 px-6 bg-white text-black hover:bg-white/90 rounded-full font-medium tracking-wide flex items-center justify-center transition-all group"
                         >
                             Continue to Trends
                             <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                        <button
+                            onClick={() => navigate('/')}
+                            className="w-full py-4 px-6 bg-transparent text-white/50 hover:text-white hover:bg-white/5 rounded-full font-medium tracking-wide flex items-center justify-center transition-all group"
+                        >
+                            <Home size={18} className="mr-2 opacity-70 group-hover:opacity-100 transition-opacity" />
+                            Return to Home
                         </button>
                     </div>
                 </motion.div>

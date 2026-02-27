@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Clock, Trash2, Heart, Phone, Check, Layers } from 'lucide-react';
+import { ArrowLeft, Clock, Trash2, Heart, Phone, Check, Layers, Home } from 'lucide-react';
 import { useReframerSession } from '../hooks/useReframerSession';
 import { useReframerHistory } from '../hooks/useReframerHistory';
 import { COGNITIVE_DISTORTIONS } from '../data/distortions';
@@ -35,6 +35,7 @@ export default function ThoughtReframer() {
     const [view, setView] = useState<View>('landing');
     const [direction, setDirection] = useState(1);
     const [showCrisis, setShowCrisis] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     // Crisis keyword detection
     useEffect(() => {
@@ -57,10 +58,15 @@ export default function ThoughtReframer() {
         }
     }, [session.currentStep, goToStep]);
 
-    const handleComplete = useCallback(() => {
-        completeSession();
-        refresh();
-        setView('completed');
+    const handleComplete = useCallback(async () => {
+        setIsSaving(true);
+        try {
+            await completeSession();
+            refresh();
+            setView('completed');
+        } finally {
+            setIsSaving(false);
+        }
     }, [completeSession, refresh]);
 
     const handleStartNewSession = useCallback(() => {
@@ -92,11 +98,15 @@ export default function ThoughtReframer() {
                 <div className="absolute top-20 left-10 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 right-10 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl" />
 
-                {/* Back */}
-                <div className="absolute top-6 left-6 z-50">
-                    <Link to="/sentience" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                {/* Back & Home */}
+                <div className="absolute top-6 left-6 z-50 flex gap-3">
+                    <Link to="/sentience" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" title="Back to Sentience">
                         <ArrowLeft size={16} />
                         <span className="text-sm font-medium">Back</span>
+                    </Link>
+                    <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" title="Return to Home">
+                        <Home size={16} />
+                        <span className="text-sm font-medium">Home</span>
                     </Link>
                 </div>
 
@@ -457,6 +467,7 @@ export default function ThoughtReframer() {
                             onComplete={handleComplete}
                             onBack={prevStep}
                             onStartNew={handleStartNewSession}
+                            isSaving={isSaving}
                         />
                     )}
                 </StepTransition>

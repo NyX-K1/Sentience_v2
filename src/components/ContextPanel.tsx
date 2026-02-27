@@ -1,87 +1,129 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { emotions as allEmotions } from '../data/emotions';
-import { EmotionDef } from '../types/mood';
-import EmotionTooltip from './EmotionTooltip';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 
-/* ─── Curated trigger categories ─── */
-const TRIGGER_CATEGORIES: { label: string; triggers: string[] }[] = [
+const TRIGGER_CATEGORIES = [
     { label: 'Life Areas', triggers: ['Work', 'Relationships', 'Health', 'Finances', 'Family', 'Social Life', 'Self-Image'] },
     { label: 'Activities', triggers: ['Exercise', 'Creativity', 'Learning', 'Commuting', 'Screen Time', 'Cooking', 'Socializing'] },
     { label: 'Body & Mind', triggers: ['Sleep Quality', 'Energy Level', 'Physical Pain', 'Meditation', 'Appetite', 'Caffeine'] },
     { label: 'Events', triggers: ['Good News', 'Bad News', 'Conflict', 'Achievement', 'Loss', 'Surprise', 'Decision'] },
 ];
 
-/* ─── Quick reflection prompts ─── */
-const REFLECTION_PROMPTS = [
-    'What happened right before this feeling?',
-    'Where are you right now?',
-    'Who are you with?',
-    'What thought keeps replaying?',
-    'What does your body feel like?',
-    'What do you need most right now?',
-];
-
 interface ContextPanelProps {
     selectedEmotionIds: string[];
-    onSave: (data: { intensity: number; triggers: string[]; customTriggers: string[]; note: string }) => void;
+    onSave: (data: {
+        emotions: { emotion: string; intensity: number }[];
+        valence: number;
+        arousal: number;
+        dominantFamily: string;
+        triggers: string[];
+        note: string;
+    }) => Promise<void>;
     onBack: () => void;
 }
 
 export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: ContextPanelProps) {
-    const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
-    const [hoveredEmotion, setHoveredEmotion] = useState<EmotionDef | null>(null);
-    const [customTriggers, setCustomTriggers] = useState<string[]>([]);
-    const [customInput, setCustomInput] = useState('');
-    const [note, setNote] = useState('');
-    const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-    const [activePrompt, setActivePrompt] = useState<string | null>(null);
+    const selectedEmotionsDefs = allEmotions.filter(e => selectedEmotionIds.includes(e.id));
 
-    // Selected emotions data
-    const selectedEmotions = allEmotions.filter(e => selectedEmotionIds.includes(e.id));
-    const avgIntensity = selectedEmotions.length > 0
-        ? Math.round(selectedEmotions.reduce((sum, e) => sum + e.intensity, 0) / selectedEmotions.length)
-        : 2;
+    // 1. Emotions with Intensity (1-4)
+    const [emotionIntensities, setEmotionIntensities] = useState<Record<string, number>>(
+        selectedEmotionIds.reduce((acc, id) => ({ ...acc, [id]: 2 }), {})
+    );
+
+    // 2. Triggers
+    const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
+    const [customInput, setCustomInput] = useState('');
+    const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+
+    // 3. Notes
+    const [note, setNote] = useState('');
+
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleIntensityChange = (id: string, val: number) => {
+        setEmotionIntensities(prev => ({ ...prev, [id]: val }));
+    };
 
     const toggleTrigger = (trigger: string) => {
-        if (customTriggers.includes(trigger)) {
-            setCustomTriggers(prev => prev.filter(t => t !== trigger));
-        } else if (selectedTriggers.includes(trigger)) {
-            setSelectedTriggers(prev => prev.filter(t => t !== trigger));
-        } else {
-            setSelectedTriggers(prev => [...prev, trigger]);
-        }
+        setSelectedTriggers(prev =>
+            prev.includes(trigger) ? prev.filter(t => t !== trigger) : [...prev, trigger]
+        );
     };
 
     const handleAddCustom = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && customInput.trim()) {
-            if (!customTriggers.includes(customInput.trim()) && !selectedTriggers.includes(customInput.trim())) {
-                setCustomTriggers(prev => [...prev, customInput.trim()]);
+            const val = customInput.trim();
+            if (!selectedTriggers.includes(val)) {
+                setSelectedTriggers(prev => [...prev, val]);
             }
             setCustomInput('');
         }
     };
 
-    const handlePromptClick = (prompt: string) => {
-        if (activePrompt === prompt) {
-            setActivePrompt(null);
-        } else {
-            setActivePrompt(prompt);
-            // Pre-fill the note area with the prompt as a starting point
-            if (!note.includes(prompt)) {
-                setNote(prev => prev ? `${prev}\n\n${prompt}\n` : `${prompt}\n`);
-            }
-        }
-    };
+    const submitForm = async () => {
+        setIsSaving(true);
+        try {
+            const emotionsData = selectedEmotionsDefs.map(e => ({
+                emotion: e.id,
+                intensity: emotionIntensities[e.id] || 2,
+                family: e.family,
+                valence: e.valence,
+                arousal: e.arousal
+            }));
 
-    const handleSave = () => {
-        onSave({
-            intensity: avgIntensity,
-            triggers: selectedTriggers,
-            customTriggers,
-            note,
-        });
+            // Calculate weighted valence and arousal based on "science" properties
+            let totalValence = 0;
+            let totalArousal = 0;
+            let weightSum = 0;
+            const familyScores: Record<string, number> = {};
+
+            emotionsData.forEach(ed => {
+                totalValence += ed.valence * ed.intensity;
+                totalArousal += ed.arousal * ed.intensity;
+                weightSum += ed.intensity;
+
+                if (!familyScores[ed.family]) {
+                    familyScores[ed.family] = 0;
+                }
+                familyScores[ed.family] += ed.intensity;
+            });
+
+            const calculatedValence = weightSum > 0 ? totalValence / weightSum : 0;
+            const calculatedArousal = weightSum > 0 ? totalArousal / weightSum : 0;
+
+            // Find dominant family automatically
+            let calculatedDominantFamily = 'Complex';
+            let maxFamilyScore = 0;
+            let isTie = false;
+
+            for (const [family, score] of Object.entries(familyScores)) {
+                if (score > maxFamilyScore) {
+                    maxFamilyScore = score;
+                    calculatedDominantFamily = family;
+                    isTie = false;
+                } else if (score === maxFamilyScore) {
+                    isTie = true;
+                }
+            }
+
+            if (isTie && Object.keys(familyScores).length > 1) {
+                calculatedDominantFamily = 'Complex'; // If tied between multiple families
+            } else if (Object.keys(familyScores).length === 0) {
+                calculatedDominantFamily = 'Complex'; // Fallback
+            }
+
+            await onSave({
+                emotions: emotionsData.map(e => ({ emotion: e.emotion, intensity: e.intensity })),
+                valence: calculatedValence,
+                arousal: calculatedArousal,
+                dominantFamily: calculatedDominantFamily,
+                triggers: selectedTriggers,
+                note
+            });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
@@ -96,49 +138,47 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
             </button>
 
             <h3 className="text-2xl md:text-3xl font-light mb-2 tracking-wide text-center">
-                Add your context
-                <span className="block text-sm text-white/30 mt-2">Help Sentience understand <em>what's behind</em> the feeling</span>
+                Refine Your Context
+                <span className="block text-sm text-white/30 mt-2">Help us understand the nuances of what you feel</span>
             </h3>
 
-            {/* ─── Selected Emotions Summary ─── */}
+            {/* 1. EMOTIONS & INTENSITY */}
             <div className="w-full max-w-xl mt-6 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-3 text-center">Feeling right now</span>
-                <div className="flex flex-wrap gap-2 justify-center">
-                    {selectedEmotions.map(em => (
-                        <div
-                            key={em.id}
-                            onMouseEnter={() => setHoveredEmotion(em)}
-                            onMouseLeave={() => setHoveredEmotion(null)}
-                            className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/15 hover:border-white/30 rounded-full text-sm text-white/90 transition-all cursor-help"
-                        >
-                            {em.label}
+                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-4 text-center">Emotion Intensity (1-4)</span>
+                <div className="space-y-4">
+                    {selectedEmotionsDefs.map(em => (
+                        <div key={em.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                            <span className="text-sm font-medium text-white/90">{em.label}</span>
+                            <div className="flex gap-2">
+                                {[1, 2, 3, 4].map(level => (
+                                    <button
+                                        key={level}
+                                        onClick={() => handleIntensityChange(em.id, level)}
+                                        className={`w-8 h-8 rounded-full text-xs transition-colors flex items-center justify-center border ${emotionIntensities[em.id] === level
+                                            ? 'bg-cyan-500/20 border-cyan-400 text-cyan-50'
+                                            : 'bg-black/20 border-white/10 text-white/40 hover:border-white/30 hover:text-white'
+                                            }`}
+                                    >
+                                        {level}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Floating Tooltip */}
-            {hoveredEmotion && (
-                <div className="fixed inset-x-0 bottom-10 z-50 pointer-events-none flex justify-center">
-                    <div className="transform origin-bottom pointer-events-auto shadow-2xl">
-                        <EmotionTooltip emotion={hoveredEmotion} />
-                    </div>
-                </div>
-            )}
-
-            {/* ─── What's influencing this? (Categorized Triggers) ─── */}
+            {/* 2. TRIGGERS */}
             <div className="w-full max-w-xl mt-5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-4 text-center">What's influencing this?</span>
+                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-4 text-center">Identifying Triggers</span>
 
-                {/* Selected triggers chips */}
-                {(selectedTriggers.length > 0 || customTriggers.length > 0) && (
+                {selectedTriggers.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 justify-center mb-4">
-                        {[...selectedTriggers, ...customTriggers].map(t => (
+                        {selectedTriggers.map(t => (
                             <motion.button
                                 key={t}
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                whileTap={{ scale: 0.95 }}
                                 onClick={() => toggleTrigger(t)}
                                 className="px-3 py-1 bg-white text-black text-xs rounded-full font-medium flex items-center gap-1.5 shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:bg-zinc-200 transition-colors"
                             >
@@ -148,7 +188,6 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
                     </div>
                 )}
 
-                {/* Expandable categories */}
                 <div className="space-y-2">
                     {TRIGGER_CATEGORIES.map(cat => {
                         const isExpanded = expandedCategory === cat.label;
@@ -178,18 +217,16 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
                                         >
                                             <div className="flex flex-wrap gap-2 px-4 pb-4">
                                                 {cat.triggers.map(t => (
-                                                    <motion.button
+                                                    <button
                                                         key={t}
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
                                                         onClick={() => toggleTrigger(t)}
                                                         className={`px-3 py-1.5 rounded-full text-xs border transition-all ${selectedTriggers.includes(t)
-                                                                ? 'bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.2)]'
-                                                                : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/15 hover:text-white hover:border-white/25'
+                                                            ? 'bg-white text-black border-white shadow-[0_0_12px_rgba(255,255,255,0.2)]'
+                                                            : 'bg-white/5 border-white/10 text-white/60 hover:bg-white/15 hover:text-white hover:border-white/25'
                                                             }`}
                                                     >
                                                         {t}
-                                                    </motion.button>
+                                                    </button>
                                                 ))}
                                             </div>
                                         </motion.div>
@@ -200,11 +237,10 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
                     })}
                 </div>
 
-                {/* Custom trigger input */}
                 <div className="mt-3">
                     <input
                         type="text"
-                        placeholder="+ Add your own (press Enter)"
+                        placeholder="+ Add your own custom trigger (press Enter)"
                         value={customInput}
                         onChange={(e) => setCustomInput(e.target.value)}
                         onKeyDown={handleAddCustom}
@@ -213,53 +249,26 @@ export default function ContextPanel({ selectedEmotionIds, onSave, onBack }: Con
                 </div>
             </div>
 
-            {/* ─── Quick Reflection Prompts ─── */}
+            {/* 3. FREE NOTE */}
             <div className="w-full max-w-xl mt-5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-4 text-center">Quick reflection starters</span>
-                <div className="grid grid-cols-2 gap-2">
-                    {REFLECTION_PROMPTS.map(prompt => (
-                        <motion.button
-                            key={prompt}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handlePromptClick(prompt)}
-                            className={`text-left px-3 py-2.5 rounded-xl text-xs leading-relaxed border transition-all ${activePrompt === prompt
-                                    ? 'bg-white/15 border-white/25 text-white/90'
-                                    : 'bg-white/5 border-white/8 text-white/50 hover:bg-white/10 hover:text-white/70'
-                                }`}
-                        >
-                            {prompt}
-                        </motion.button>
-                    ))}
-                </div>
-            </div>
-
-            {/* ─── Free Note ─── */}
-            <div className="w-full max-w-xl mt-5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-3 text-center">Anything else on your mind?</span>
+                <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] block mb-3 text-center">Journaling Note</span>
                 <textarea
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
-                    maxLength={500}
-                    placeholder="Write freely — no one sees this but you..."
-                    className="w-full h-28 bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/20 focus:bg-white/8 transition-all resize-none leading-relaxed"
+                    placeholder="Write freely — what's on your mind?"
+                    className="w-full h-32 bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/20 focus:bg-white/8 transition-all resize-none leading-relaxed"
                 />
-                <div className="text-right text-[10px] text-white/20 mt-1.5 font-mono pr-1">{note.length}/500</div>
             </div>
 
-            {/* ─── Action Buttons ─── */}
-            <div className="w-full max-w-xl mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            {/* ACTION BUTTONS */}
+            <div className="w-full max-w-xl mt-6 flex flex-col sm:flex-row gap-3 justify-center relative">
                 <button
-                    onClick={handleSave}
-                    className="flex-1 px-8 py-3.5 bg-white text-black font-medium rounded-full text-sm hover:bg-zinc-200 transition-colors uppercase tracking-widest shadow-[0_0_30px_rgba(255,255,255,0.15)]"
+                    onClick={submitForm}
+                    disabled={isSaving}
+                    className="flex-1 px-8 py-4 bg-white text-black font-semibold rounded-full text-sm hover:bg-zinc-200 transition-colors uppercase tracking-widest shadow-[0_0_30px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2 disabled:opacity-70"
                 >
-                    Save Entry
-                </button>
-                <button
-                    onClick={handleSave}
-                    className="flex-1 px-8 py-3.5 bg-transparent text-white/70 border border-white/15 font-medium rounded-full text-sm hover:bg-white/5 hover:text-white transition-all uppercase tracking-widest"
-                >
-                    Save & Journal →
+                    {isSaving ? <Loader2 size={18} className="animate-spin" /> : null}
+                    {isSaving ? 'Saving to Database...' : 'Save Mood'}
                 </button>
             </div>
         </motion.div>

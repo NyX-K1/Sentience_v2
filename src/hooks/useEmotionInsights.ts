@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { EmotionDef } from '../types/mood';
 import { emotions as allEmotions } from '../data/emotions';
 
-const GROQ_API_KEY = "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";
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 export interface InsightData extends Partial<EmotionDef> {
     copingStrategies?: string[];

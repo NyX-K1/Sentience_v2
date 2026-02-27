@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { ThoughtReframerSession } from '../types/reframer';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 const DRAFT_KEY = 'sentience_reframer_draft';
 
@@ -27,6 +29,7 @@ const createEmptySession = (): ThoughtReframerSession => ({
 });
 
 export const useReframerSession = () => {
+    const { user } = useAuth();
     const [session, setSession] = useState<ThoughtReframerSession>(createEmptySession);
     const [hasDraft, setHasDraft] = useState(false);
     const startTime = useRef(Date.now());
@@ -78,18 +81,54 @@ export const useReframerSession = () => {
         setSession(prev => ({ ...prev, currentStep: step, updatedAt: new Date().toISOString() }));
     }, []);
 
-    const completeSession = useCallback(() => {
+    const completeSession = useCallback(async () => {
         const durationMinutes = Math.round((Date.now() - startTime.current) / 60000);
+        const beliefShift = session.initialBelief - session.finalBelief;
+
         const completed: ThoughtReframerSession = {
             ...session,
             isComplete: true,
             completedAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            beliefShift: session.initialBelief - session.finalBelief,
+            beliefShift,
             durationMinutes
         };
 
-        // Save to history
+        if (user) {
+            try {
+                const { error } = await supabase
+                    .from('thought_reframing_sessions')
+                    .insert([{
+                        user_id: user.id,
+                        situation_description: session.situation,
+                        situation_date: session.situationDate || new Date().toISOString(),
+                        context_tags: session.contextTags,
+                        automatic_thought: session.automaticThought,
+                        initial_belief: session.initialBelief,
+                        initial_emotions: session.initialEmotions,
+                        physical_sensations: session.bodyMapRegions?.map(r => `${r.region}: ${r.sensation}`) || [],
+                        cognitive_distortions: session.identifiedDistortions,
+                        evidence_supporting: session.evidenceFor.join('\n'),
+                        evidence_against: session.evidenceAgainst.join('\n'),
+                        brainstormed_alternatives: session.reframedThoughts,
+                        selected_reframe: session.selectedReframe,
+                        final_belief: session.finalBelief,
+                        final_emotions: session.finalEmotions,
+                        belief_shift: beliefShift,
+                        takeaway: session.personalTakeaway || '',
+                        coping_strategies: session.copingSuggestions,
+                        duration_minutes: durationMinutes
+                    }]);
+
+                if (error) {
+                    console.error('Error saving reframing session to Supabase:', error);
+                }
+            } catch (err) {
+                console.error('Unexpected error saving to Supabase:', err);
+            }
+        }
+
+        // Save to history locally
         try {
             const historyKey = 'sentience_reframer_history';
             const existing = JSON.parse(localStorage.getItem(historyKey) || '[]') as ThoughtReframerSession[];
@@ -100,7 +139,7 @@ export const useReframerSession = () => {
 
         setSession(completed);
         return completed;
-    }, [session]);
+    }, [session, user]);
 
     return {
         session,

@@ -124,7 +124,7 @@ export default function SentienceLanding() {
             textColor: "#c7d2fe",
             links: [
                 { label: "Write Smart Journal", ariaLabel: "Open Smart Journal", href: "/smart-journalling" },
-                { label: "Voice Notes", ariaLabel: "Record Voice Note", href: "/voice-notes" }
+                { label: "Past Entries (Diary)", ariaLabel: "View Past Entries", href: "/diary" }
             ]
         },
         {
@@ -132,14 +132,14 @@ export default function SentienceLanding() {
             bgColor: "#0c4a6e",
             textColor: "#bae6fd",
             links: [
-                { label: "Weekly Report", ariaLabel: "View Weekly Report", href: "/weekly-report" },
-                { label: "Emotional Patterns", ariaLabel: "View Emotional Patterns", href: "/emotional-patterns" }
+                { label: "Data Export", ariaLabel: "View Data Export", href: "/data-export" },
+                { label: "User Analytics", ariaLabel: "View User Analytics", href: "/user-analytics" }
             ]
         }
     ];
 
     return (
-        <div className="min-h-screen w-full bg-black text-white overflow-x-hidden selection:bg-cyan-500/30 font-sans">
+        <div className="min-h-screen w-full bg-black text-white overflow-x-hidden selection:bg-cyan-500/30 font-sans relative">
 
             {/* Prism Background Shader */}
             <div className="fixed inset-0 z-0 w-full h-full pointer-events-none">

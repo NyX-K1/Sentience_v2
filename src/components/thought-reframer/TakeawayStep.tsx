@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, RotateCcw, ArrowLeft, CheckCircle2, MapPin, Search, Wrench } from 'lucide-react';
+import { Sparkles, RotateCcw, ArrowLeft, CheckCircle2, MapPin, Search, Wrench, Loader2 } from 'lucide-react';
 import { COGNITIVE_DISTORTIONS } from '../../data/distortions';
 import { COPING_SUGGESTIONS } from '../../data/reframePrompts';
 import { emotions as allEmotions } from '../../data/emotions';
@@ -19,6 +19,7 @@ interface TakeawayStepProps {
     onComplete: () => void;
     onBack: () => void;
     onStartNew: () => void;
+    isSaving?: boolean;
 }
 
 export default function TakeawayStep({
@@ -34,7 +35,8 @@ export default function TakeawayStep({
     onUpdate,
     onComplete,
     onBack,
-    onStartNew
+    onStartNew,
+    isSaving = false
 }: TakeawayStepProps) {
     const beliefShift = initialBelief - finalBelief;
     const getEmotionLabel = (id: string) => allEmotions.find(e => e.id === id)?.label || id;
@@ -170,13 +172,14 @@ export default function TakeawayStep({
                 {/* Actions */}
                 <div className="flex flex-col gap-3">
                     <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        whileHover={!isSaving ? { scale: 1.02 } : {}}
+                        whileTap={!isSaving ? { scale: 0.98 } : {}}
                         onClick={onComplete}
-                        className="w-full px-8 py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-500/20 flex items-center justify-center gap-3"
+                        disabled={isSaving}
+                        className="w-full px-8 py-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-violet-500/20 flex items-center justify-center gap-3 disabled:opacity-70"
                     >
-                        <CheckCircle2 size={20} />
-                        Save & Complete Session
+                        {isSaving ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle2 size={20} />}
+                        {isSaving ? 'Saving to Journal...' : 'Save & Complete Session'}
                     </motion.button>
 
                     <div className="flex gap-3">

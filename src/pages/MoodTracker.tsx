@@ -12,7 +12,11 @@ import EmotionHeatmap from '../components/EmotionHeatmap';
 import PostSaveReflection from '../components/PostSaveReflection';
 import Ballpit from '../components/Ballpit';
 import { EmotionFamily } from '../types/mood';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { Home } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 const MoodTracker = () => {
     const [activeTab, setActiveTab] = useState<'log' | 'trends'>('log');
@@ -23,11 +27,13 @@ const MoodTracker = () => {
     const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
     const [showContext, setShowContext] = useState(false);
 
-    // Post-Save Flow State
     const [showReflection, setShowReflection] = useState(false);
     const [justSavedEmotionIds, setJustSavedEmotionIds] = useState<string[]>([]);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+    const navigate = useNavigate();
     const { entries, addEntry } = useMoodStore();
+    const { user } = useAuth();
 
     const handleToggleEmotion = (id: string) => {
         setSelectedEmotions(prev =>
@@ -35,31 +41,68 @@ const MoodTracker = () => {
         );
     };
 
-    const handleSave = (contextData: { intensity: number; triggers: string[]; customTriggers: string[]; note: string }) => {
-        // In a complete implementation, this would calculate true composite valence/arousal from the selected emotions.
-        // For Phase 2, we just ensure it saves to the hook.
-        addEntry({
-            emotions: selectedEmotions.map(id => ({ emotionId: id, intensity: contextData.intensity })),
-            compositeValence: 0,
-            compositeArousal: 0,
-            dominantFamily: family || 'Complex',
-            triggers: contextData.triggers,
-            customTriggers: contextData.customTriggers,
-            freeNote: contextData.note,
-            source: 'manual',
-            userId: 'local-user', // mocked since no auth system is provided yet
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-        });
+    const handleSave = async (contextData: {
+        emotions: { emotion: string; intensity: number }[];
+        valence: number;
+        arousal: number;
+        dominantFamily: string;
+        triggers: string[];
+        note: string
+    }) => {
+        if (!user) {
+            alert('You must be logged in to save mood logs.');
+            return;
+        }
 
-        // Store saved IDs for reflection modal
-        setJustSavedEmotionIds([...selectedEmotions]);
-        setShowReflection(true);
+        try {
+            // Map state to the exact columns in mood_logs table
+            const { error } = await supabase.from('mood_logs').insert([{
+                user_id: user.id,
+                local_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                emotions: contextData.emotions, // JSONB array 
+                valence: contextData.valence,
+                arousal: contextData.arousal,
+                dominant_family: contextData.dominantFamily,
+                triggers: contextData.triggers,
+                notes: contextData.note,
+                source_context: 'manual'
+            }]);
 
-        // Reset flow
-        setQuadrant(null);
-        setFamily(null);
-        setSelectedEmotions([]);
-        setShowContext(false);
+            if (error) {
+                console.error("Supabase Error:", error);
+                throw error;
+            }
+
+            // Keep optimistic UI updated for the Trends tab
+            addEntry({
+                emotions: contextData.emotions.map(e => ({ emotionId: e.emotion, intensity: e.intensity })),
+                compositeValence: contextData.valence,
+                compositeArousal: contextData.arousal,
+                dominantFamily: contextData.dominantFamily as EmotionFamily,
+                triggers: contextData.triggers,
+                customTriggers: [],
+                freeNote: contextData.note,
+                source: 'manual',
+                userId: user.id,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            });
+
+            // Show a calming toast notification
+            setToastMessage('Mood logged successfully 🍃');
+            setTimeout(() => setToastMessage(null), 3000);
+
+            // Store saved IDs for reflection modal
+            setJustSavedEmotionIds([...selectedEmotions]);
+            setShowReflection(true);
+
+            // Reset flow
+            setQuadrant(null);
+            setFamily(null);
+            setSelectedEmotions([]);
+            setShowContext(false);
+        } catch (error) {
+            alert('An error occurred while saving. Please try again.');
+        }
     };
 
     const handleContinueFromReflection = () => {
@@ -84,8 +127,32 @@ const MoodTracker = () => {
                 />
             </div>
 
+            {/* Calming Toast Notification */}
+            <AnimatePresence>
+                {toastMessage && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-white/10 backdrop-blur-xl border border-white/20 text-white px-6 py-3 rounded-full shadow-[0_0_30px_rgba(255,255,255,0.1)] font-medium text-sm flex items-center gap-2"
+                    >
+                        {toastMessage}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Main Content Area */}
             <div className="relative z-10 container mx-auto px-4 pt-6 pb-24 md:pb-6 flex flex-col h-screen overflow-hidden pointer-events-none">
+
+                {/* Return Home Button */}
+                <button
+                    onClick={() => navigate('/')}
+                    className="absolute top-6 left-4 md:left-8 z-40 p-3 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-white/50 hover:text-white hover:bg-white/10 transition-all pointer-events-auto shadow-[0_8px_32px_rgba(0,0,0,0.5)] group"
+                    title="Return to Home"
+                    aria-label="Return to Home"
+                >
+                    <Home size={20} className="group-hover:scale-110 transition-transform" />
+                </button>
 
                 {/* Floating Navigation Pill */}
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-sm px-4 pointer-events-auto">

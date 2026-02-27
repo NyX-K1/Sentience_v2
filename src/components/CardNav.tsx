@@ -5,6 +5,9 @@ import { ArrowRight, Menu, X } from 'lucide-react';
 import GuidedBreakthroughs from '@/components/ui/guided-breakthroughs';
 import ThoughtRewiring from '@/components/ui/thought-rewiring';
 import NeuralInsights from '@/components/ui/neural-insights';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
 
 interface NavLink {
     label: string;
@@ -48,6 +51,14 @@ export default function CardNav({
     const containerRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
     const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/auth');
+    };
 
     const isControlled = controlledIsOpen !== undefined;
     const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
@@ -144,6 +155,37 @@ export default function CardNav({
                     {isOpen ? <X size={16} /> : <Menu size={16} />}
                 </button>
             </div>
+
+            {/* Profile Button Top Left */}
+            {user && (
+                <div className="fixed top-6 left-8 z-[60] flex items-center gap-4 pointer-events-auto">
+                    <div className="flex bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-1 pr-4 items-center gap-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/40 to-cyan-500/40 border border-white/20 flex items-center justify-center">
+                            <span className="text-xs font-semibold uppercase text-white tracking-widest">{user.full_name?.[0] || user.username?.[0] || 'U'}</span>
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-xs font-medium text-white/90">{user.full_name || 'User'}</span>
+                            <span className="text-[9px] text-white/40 uppercase tracking-widest">@{user.username || 'user'}</span>
+                        </div>
+                        <div className="w-[1px] h-4 bg-white/20 ml-2 mx-1 hidden sm:block"></div>
+                        <button
+                            onClick={handleLogout}
+                            title="Log Out"
+                            className="hidden sm:flex text-white/40 hover:text-red-400 transition-colors ml-1 p-1"
+                        >
+                            <LogOut size={14} />
+                        </button>
+                    </div>
+                    {/* Mobile logout button outside */}
+                    <button
+                        onClick={handleLogout}
+                        title="Log Out"
+                        className="sm:hidden flex bg-black/40 backdrop-blur-xl border border-white/10 rounded-full p-2.5 text-white/40 hover:text-red-400 transition-colors shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+                    >
+                        <LogOut size={16} />
+                    </button>
+                </div>
+            )}
 
             {/* Full Screen Menu Overlay */}
             <div

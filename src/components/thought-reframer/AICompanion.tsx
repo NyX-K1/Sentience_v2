@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Wand2 } from 'lucide-react';
 
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 export interface AIResponse {
     suggestions: string[];

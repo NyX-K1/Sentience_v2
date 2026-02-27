@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import {
     ArrowLeft, ChevronRight,
-    Loader2, Send, RotateCcw, MessageCircle
+    Loader2, Send, RotateCcw, MessageCircle, Home
 } from 'lucide-react';
 import { useMoodStore } from '../hooks/useMoodStore';
 import { COGNITIVE_DISTORTIONS } from '../data/distortions';
@@ -11,6 +11,8 @@ import { emotions as EMOTION_DB } from '../data/emotions';
 import DistortionIcon from '../components/thought-reframer/DistortionIcon';
 import NeuralBackground from '../components/ui/flow-field-background';
 import JournalStories from '../components/JournalStories';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 // ─── Types ───
 interface DeepAnalysis {
@@ -24,7 +26,7 @@ interface DeepAnalysis {
     thoughtReframerSuggested: boolean;
 }
 
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
 const WRITING_PROMPTS = [
     "What's weighing on you right now?",
@@ -43,8 +45,10 @@ interface ConvoMessage {
 
 export default function SmartJournalling2() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const { entries } = useMoodStore();
     const [journalText, setJournalText] = useState('');
+    const [currentJournalId, setCurrentJournalId] = useState<string | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState<DeepAnalysis | null>(null);
     const [activePrompt, setActivePrompt] = useState<number | null>(null);
@@ -137,6 +141,31 @@ Return ONLY raw JSON:
             const content = data.choices?.[0]?.message?.content || '{}';
             const parsed: DeepAnalysis = JSON.parse(content);
             setAnalysis(parsed);
+
+            // Phase 1: Save to Supabase journal_entries
+            if (user) {
+                const { data: insertData, error } = await supabase
+                    .from('journal_entries')
+                    .insert([{
+                        user_id: user.id,
+                        content: journalText,
+                        sentiment: parsed.sentiment,
+                        mood_score: parsed.moodScore,
+                        detected_emotions: parsed.detectedEmotions || [],
+                        detected_distortions: parsed.cognitiveDistortions || [],
+                        coping_strategies: parsed.copingStrategies || [],
+                        core_insight: parsed.insight || ''
+                    }])
+                    .select('id')
+                    .single();
+
+                if (error) {
+                    console.error('Error saving journal entry:', error);
+                } else if (insertData) {
+                    setCurrentJournalId(insertData.id);
+                }
+            }
+
             setView('reflect');
         } catch (err) {
             console.error('Analysis failed:', err);
@@ -148,6 +177,7 @@ Return ONLY raw JSON:
     const handleReset = () => {
         setJournalText('');
         setAnalysis(null);
+        setCurrentJournalId(null);
         setView('write');
         setActivePrompt(null);
         setConvoMessages([]);
@@ -155,6 +185,26 @@ Return ONLY raw JSON:
     };
 
     // Conversational follow-up handler
+    const appendChatMessage = async (role: 'user' | 'assistant', message: string) => {
+        if (!currentJournalId) return;
+
+        try {
+            const { error } = await supabase
+                .from('journal_conversations')
+                .insert([{
+                    journal_id: currentJournalId,
+                    role: role,
+                    message: message
+                }]);
+
+            if (error) {
+                console.error(`Error saving ${role} message:`, error);
+            }
+        } catch (err) {
+            console.error(`Unexpected error saving ${role} message:`, err);
+        }
+    };
+
     const handleConvoSend = async () => {
         if (!convoInput.trim() || isConvoLoading || convoMessages.filter(m => m.role === 'user').length >= MAX_EXCHANGES) return;
 
@@ -162,6 +212,9 @@ Return ONLY raw JSON:
         setConvoMessages(prev => [...prev, userMsg]);
         setConvoInput('');
         setIsConvoLoading(true);
+
+        // Save user message to DB
+        await appendChatMessage('user', userMsg.content);
 
         try {
             // Build conversation history for context
@@ -197,8 +250,14 @@ Continue the therapeutic conversation naturally. Be warm, specific, and gently g
             const data = await resp.json();
             const reply = data.choices?.[0]?.message?.content || 'I hear you. Could you tell me more about what that feels like?';
             setConvoMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+
+            // Save AI reply to DB
+            await appendChatMessage('assistant', reply);
+
         } catch {
-            setConvoMessages(prev => [...prev, { role: 'assistant', content: 'I\'m here with you. Take your time — what feels most important right now?' }]);
+            const fallbackReply = 'I\'m here with you. Take your time — what feels most important right now?';
+            setConvoMessages(prev => [...prev, { role: 'assistant', content: fallbackReply }]);
+            await appendChatMessage('assistant', fallbackReply);
         } finally {
             setIsConvoLoading(false);
         }
@@ -223,10 +282,16 @@ Continue the therapeutic conversation naturally. Be warm, specific, and gently g
 
             {/* Header */}
             <div className="relative z-10 max-w-3xl mx-auto px-4 pt-6 flex justify-between items-center">
-                <Link to="/sentience" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
-                    <ArrowLeft size={16} />
-                    <span className="text-sm">Back</span>
-                </Link>
+                <div className="flex items-center gap-3">
+                    <Link to="/sentience" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" title="Back to Sentience">
+                        <ArrowLeft size={16} />
+                        <span className="text-sm">Back</span>
+                    </Link>
+                    <Link to="/" className="flex items-center gap-2 text-white/40 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10" title="Return to Home">
+                        <Home size={16} />
+                        <span className="text-sm">Home</span>
+                    </Link>
+                </div>
                 <span className="text-[10px] text-white/20 uppercase tracking-[0.2em]">Smart Journal</span>
             </div>
 
