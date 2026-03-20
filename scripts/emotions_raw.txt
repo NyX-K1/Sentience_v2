@@ -1,0 +1,83 @@
+Joy
+Intensity 4 (Peak):
+Ecstatic, Elated, Overjoyed, Rapturous, Exultant, Jubilant
+Intensity 3 (Strong):
+Joyful, Delighted, Thrilled, Triumphant, Exhilarated, Gleeful, Giddy, Buoyant, Ebullient, Invigorated, Enchanted, Enthralled, Captivated, Inspired, Moved
+Intensity 2 (Moderate):
+Pleased, Cheerful, Amused, Grateful, Appreciative, Playful, Lighthearted, Merry, Jovial, Spirited, Uplifted, Touched, Rejuvenated, Refreshed, Fulfilled, Accomplished, Gratified, Empowered, Liberated, Vivacious, Enthusiastic, Optimistic, Warm, Whimsical, Charmed, Tickled, Sanguine, Mirthful, Absorbed, Fascinated
+Intensity 1 (Mild):
+Satisfied, Comfortable, Relieved, Serene, Peaceful, Tranquil, Carefree, Settled, Mellow, Gentle, Cozy, At Ease, Blessed, Pleasant, Agreeable, Fine, Okay, Decent, Steady, Rested
+
+Trust
+Intensity 4 (Peak):
+Devoted, Adoring, Bonded, Intimate, Unconditional
+Intensity 3 (Strong):
+Admiring, Trusting, Loyal, Faithful, Cherished, Beloved, Treasured, Embraced, Protected, Sheltered, Nurtured, Anchored, Grounded, Confident, Assured
+Intensity 2 (Moderate):
+Accepting, Open, Secure, Respected, Welcomed, Included, Acknowledged, Validated, Believed, Reassured, Comforted, Belonging, Cooperative, Harmonious, Aligned, Attuned, Reciprocated, Empathetic, Compassionate, Caring, Affectionate, Tender, Appreciative, Collaborative, Mutual
+Intensity 1 (Mild):
+Tolerant, Patient, Stable, Steady, Certain, Reliable, Comfortable, Familiar, Neutral Trust, Acquainted, Cordial, Amenable, Approachable, Receptive, Permissive
+
+Fear
+Intensity 4 (Peak):
+Panicked, Horrified, Petrified, Hysterical, Frantic, Desperate, Tormented, Anguished, Trapped, Cornered
+Intensity 3 (Strong):
+Fearful, Alarmed, Dread-filled, Shaken, Rattled, Threatened, Intimidated, Helpless, Powerless, Defenseless, Disturbed, Troubled, Distressed, Hypervigilant, Haunted, Plagued, Spooked, Unnerved, Dismayed, Stricken
+Intensity 2 (Moderate):
+Worried, Apprehensive, Nervous, Stressed, Tense, Pressured, Strained, Agitated, Flustered, Disconcerted, Perturbed, On Edge, Edgy, Jumpy, Uneasy, Unsettled, Suspicious, Distrustful, Exposed, Fragile, Doubtful, Uncertain, Self-Conscious, Guarded, Wary
+Intensity 1 (Mild):
+Cautious, Hesitant, Timid, Shy, Reluctant, Watchful, Alert, Careful, Concerned, Worried-Adjacent, Slightly Nervous, Butterflies, Jittery, Fidgety, Skittish
+
+Surprise
+Intensity 4 (Peak):
+Shocked, Stunned, Dumbfounded, Flabbergasted, Speechless, Thunderstruck, Floored, Staggered, Gobsmacked, Blindsided
+Intensity 3 (Strong):
+Bewildered, Disbelieving, Incredulous, Overwhelmed-by-Surprise, Wonderstruck, Taken Aback, Jolted, Electrified, Blown Away, Dazed, Shook
+Intensity 2 (Moderate):
+Perplexed, Baffled, Mystified, Puzzled, Caught Off Guard, Nonplussed, Discombobulated, Intrigued, Curious, Fascinated, Mesmerized, Spellbound, Riveted, Disoriented, Thrown
+Intensity 1 (Mild):
+Distracted, Unfocused, Diverted, Bemused, Quizzical, Raised-Eyebrow, Unexpected, Mildly Surprised, Hmm, Double-Take
+
+Sadness
+Intensity 4 (Peak):
+Devastated, Shattered, Crushed, Destroyed, Inconsolable, Agonized, Wrecked, Gutted, Broken, Despairing, Bereft, Desolate, Suicidal Ideation Adjacent
+Intensity 3 (Strong):
+Sorrowful, Mournful, Lamenting, Grieving, Abandoned, Rejected, Forsaken, Betrayed-Sad, Wounded, Pained, Suffering, Tormented, Miserable, Wretched, Forlorn, Empty, Hollow, Vacant, Lost, Directionless, Purposeless, Forgotten, Neglected, Excluded, Isolated
+Intensity 2 (Moderate):
+Hurt, Dejected, Downcast, Crestfallen, Disheartened, Dispirited, Despondent, Glum, Morose, Somber, Gloomy, Blue, Heavy-Hearted, Weepy, Tearful, Doleful, Withdrawn, Detached, Disconnected, Uninspired, Low, Drained, Depleted, Defeated, Overlooked, Ignored, Homesick, Wistful, Pining, Regretful-Sad
+Intensity 1 (Mild):
+Pensive, Down, Flat, Subdued, Quiet-Sad, Bittersweet, Tender-Sad, Nostalgic-Sad, Contemplative-Sad, Sighing, Heavy, Tired-Sad, Weary, Listless, Languid, Lethargic, Fatigued, Exhausted, Blah, Meh
+
+Disgust
+Intensity 4 (Peak):
+Loathing, Revolted, Abhorrent, Sickened, Nauseated, Self-Loathing, Mortified, Humiliated, Appalled, Horrified-Disgust
+Intensity 3 (Strong):
+Disgusted, Scornful, Disdainful, Derisive, Repelled, Offended, Scandalized, Outraged-Disgust, Detesting, Despising, Grossed Out, Cringing, Embarrassed, Self-Disgusted, Tainted
+Intensity 2 (Moderate):
+Averse, Disapproving, Judgmental, Critical, Dismissive, Condescending, Sneering, Fed Up, Jaded, Cynical, Skeptical, Disillusioned, Disenchanted, Over It, Turned Off, Put Off, Uncomfortable-Disgust, Squeamish, Icky, Unclean
+Intensity 1 (Mild):
+Bored, Indifferent, Unimpressed, Blasé, Mildly Annoyed, Distasteful, Unenthused, Disinterested, Apathetic-Disgust, Stale, Tired Of, Eye-Rolling, Whatever, Unfazed-Negative, Flat-Disgust
+
+Anger
+Intensity 4 (Peak):
+Livid, Seething, Wrathful, Murderous-Rage, Volcanic, Explosive, Savage, Incensed, Infuriated, Blind Rage, Vengeful, Vindictive, Hateful, Hostile, Rabid
+Intensity 3 (Strong):
+Angry, Outraged, Irate, Indignant, Affronted, Provoked, Antagonized, Combative, Aggressive, Belligerent, Defiant, Rebellious, Spiteful, Malicious, Embittered, Fuming, Raging, Volatile, Burning, Smoldering, Acrimonious, Rancorous, Vitriolic, Venomous, Bitter-Angry
+Intensity 2 (Moderate):
+Irritated, Agitated, Exasperated, Displeased, Dissatisfied, Disgruntled, Snappy, Cranky, Grumpy, Grouchy, Moody, Testy, Touchy, Prickly, Short-Tempered, Simmering, Bristling, Cross, Hot-Headed, Inflamed, Offended, Slighted, Wronged, Cheated, Miffed
+Intensity 1 (Mild):
+Impatient, Peeved, Irked, Bothered, Bugged, Nettled, Ruffled, Ticked Off, Huffy, Petulant, Sulky, Pouty, Surly, Curt, Brusque, Edgy-Anger, Salty, Passive-Aggressive, Snarky, Discontented
+
+Anticipation
+Intensity 4 (Peak):
+Obsessed, Consumed, Fixated, Manic-Anticipation, Frenzied, Desperate-Want, Starving-For, Burning-Desire, Compulsive, All-Consuming
+Intensity 3 (Strong):
+Vigilant, Driven, Determined, Resolute, Ambitious, Craving, Desiring, Yearning-For, Aching-For, Pining-For, Hungry-For, Passionate, Fervent, Zealous, Ardent, Purposeful, Focused, Intent, Motivated, Striving
+Intensity 2 (Moderate):
+Anticipating, Interested, Curious, Engaged, Expectant, Enthusiastic, Ready, Prepared, Planning, Calculating, Strategizing, Aspiring, Fantasizing, Daydreaming, Wishing, Wanting, Coveting, Envious, Brooding, Preoccupied, Contemplative, Pondering, Wondering, Speculating, Projecting
+Intensity 1 (Mild):
+Waiting, Patient-Anticipation, Open-to, Receptive, Leisurely-Curious, Browsing, Exploring, Considering, Mulling, Toying-With, Half-Interested, On-the-Fence, Simmering-Interest, Warming-Up, Tentative, Cautiously-Optimistic, Quietly-Excited, Gently-Curious, Watchful, Observant
+
+Complex
+Intensity 3 (Strong):
+Existential Dread, Existential Crisis, Angst, Weltschmerz, Absurdist, Nihilistic, Fatalistic, Meaninglessness, Purposelessness, Void, Abyss, Dark Night of the Soul, Existential Loneliness, Mortality Awareness, Impermanence, Groundlessness, Vertigo-of-Freedom, Radical Uncertainty, Cosmic Insignificance, Imposter Syndrome, Self-Doubt, Self-Consciousness, Self-Criticism, Self-Compassion, Self-Acceptance, Self-Loathing, Self-Worth Crisis, Identity Confusion, Identity Shift, Authenticity, Inauthenticity, Fragility, Empowerment, Inadequacy, Inferiority, Superiority, Grandiosity, Humility, Meekness, Invisible, Seen, Unmasked, Exposed-Complex, Raw, Stripped, Ego Death, Dissolution, Burnout, Compassion Fatigue, Emotional Exhaustion, Decision Fatigue, Analysis Paralysis, Emotional Labor, Overwhelm, Sensory Overload, Information Overload, Stimulus Satiation, Depletion, Running-on-Empty, Second Wind, Hitting-the-Wall, Zombie Mode, Autopilot, Survival Mode, Hyperarousal, Hypoarousal, Freeze, Shutdown, Collapse, Flatline, Flow, Peak Experience, In-the-Zone, Transcendence, Unity, Oceanic Feeling, Mystical Experience, Awe, Sublime, Reverence, Wonder, Enchantment, Rapture, Ecstatic-Complex, Luminous, Clarity, Epiphany, Eureka, Satori, Awakening, Heightened Awareness, Hyperfocus, Total Absorption, Timelessness, Effortlessness, Grace, Alignment, Alienation, Belonging, Longing-for-Connection, Enmeshment, Codependency, Abandonment, Rejection Sensitivity, Social Anxiety, Social Exhaustion, People-Pleasing Fatigue, Boundary Violation, Betrayal Trauma, Trust Rupture, Repair, Reconciliation, Forgiveness, Grudge, Unresolved, Closure, Unrequited, Attachment Anxiety, Attachment Avoidance, Love-Bombing Aftermath, Gaslighting Aftermath, Manipulation Awareness, Sonder, Ubuntu, Collective Grief, Shared Joy, Communitas, Mob Mentality, Herd Anxiety, Peer Pressure, FOMO, JOMO, Comparison, Envy-Complex, Jealousy-Complex, Possessiveness, Protectiveness, Territorial, Anticipatory Grief, Disenfranchised Grief, Complicated Grief, Ambiguous Loss, Frozen Grief, Delayed Grief, Cumulative Grief, Grief Burst, Anniversary Reaction, Phantom Limb Emotion, Missing, Absence, Void-of-Loss, Moving On Guilt, Survivor Guilt, Relief-After-Loss, Liberation-After-Loss, Bittersweet Memory, Legacy Feeling, Continuing Bonds, Shame, Guilt, Toxic Shame, Healthy Guilt, Moral Injury, Moral Disgust, Moral Outrage, Moral Elevation, Scrupulosity, Perfectionism Shame, Body Shame, Sexual Shame, Financial Shame, Poverty Shame, Success Guilt, Privilege Guilt, Survivor Guilt, White Guilt, Cultural Shame, Generational Shame, Inherited Shame, Cringe (Self-Directed), Second-Hand Embarrassment, Vicarious Shame, Triggered, Flashback, Dissociation, Depersonalization, Derealization, Emotional Flashback, Body Flashback, Hypervigilance, Startle Response, Freeze Response, Fawn Response, Fight Response, Flight Response, Collapse Response, Learned Helplessness, Traumatic Bonding, Post-Traumatic Growth, Resilience, Recovery, Healing, Reclaiming, Scar Tissue Strength, Broken Open, Kintsugi Feeling, Cognitive Dissonance, Confirmation Bias Comfort, Echo Chamber Feeling, Information Anxiety, Doom Scrolling State, Outrage Addiction, Virtue Signaling Guilt, Performative Emotion, Emotional Suppression, Emotional Bypassing, Toxic Positivity, Forced Happiness, Masked Emotion, Hidden Feeling, Emotional Leaking, Emotional Flooding, Emotional Numbness, Alexithymia, Emotional Granularity, Emotional Agility, Meta-Emotion, Feeling About Feelings, Emotional Avoidance, Emotional Approach, Saudade, Hiraeth, Toska, Mono no Aware, Wabi-Sabi, Fernweh, Wanderlust, Sehnsucht, Hygge, Gezelligheid, Ikigai, Duende, Meraki, Mamihlapinatapai, Schadenfreude, Mudita, Fremdschämen, Torschlusspanik, Han, Amae, Litost, Tocsin, L'appel du Vide, Jouissance, Ennui, Acedia, Anomie, Malaise, Languishing, Flourishing, Eudaimonia, Ataraxia, Apatheia, Equanimity, Magnanimity, Doom Scrolling Dread, Notification Anxiety, Reply Anxiety, Inbox Overwhelm, Zoom Fatigue, Screen Fatigue, Digital Burnout, Online Disinhibition, Cancel Anxiety, Viral Shame, Parasocial Attachment, Parasocial Grief, Algorithm Frustration, Echo Chamber Comfort, Filter Bubble Unease, Digital Loneliness, Connected Isolation, Phantom Vibration, Refresh Compulsion, Like Validation Need, Follower Anxiety, Comparison Spiral, Doomscrolling Guilt, Tech Nostalgia, Unplugged Relief, Digital Detox Withdrawal, AI Uncanny Valley Feeling, Automation Anxiety, Obsolescence Fear, Determination, Grit, Tenacity, Perseverance, Resolve, Willpower, Discipline, Commitment, Dedication, Focus, Hunger-for-Success, Competitive Fire, Achievement Rush, Victory, Defeat, Failure, Setback, Comeback, Underdog Energy, Proving-Them-Wrong, Vindication, Validation, Recognition, Acknowledgment, Overlooked, Underestimated, Overachievement Pressure, Underperformance Shame, Plateau Frustration, Breakthrough Joy, Mastery, Competence, Incompetence, Skill Gap Anxiety, Learning Curve Frustration, Beginner's Mind, Growth Mindset, Fixed Mindset Trap, Past Regret, Future Anxiety, Present Moment Awareness, Nostalgia, Time Pressure, Deadline Panic, Running Out of Time, Wasted Time Guilt, Lost Years Grief, Youth Nostalgia, Aging Anxiety, Mortality Salience, Legacy Anxiety, Generativity, Stagnation, Quarter-Life Crisis, Midlife Crisis, Sunset Feeling, Dawn Feeling, Seasonal Affect, Winter Blues, Spring Awakening, Summer Euphoria, Autumn Melancholy, Sunday Scaries, Monday Dread, Friday Liberation, Holiday Loneliness, Birthday Blues, Anniversary Emotion, Hangry, Tired-Wired, Restless Legs Emotion, Gut Feeling, Butterflies, Pit in Stomach, Lump in Throat, Heart Sinking, Heart Swelling, Chest Tightness, Breathing Easy, Weight Lifted, Heavy, Light, Buzzing, Vibrating, Tingling, Frozen, Melting, Burning Up, Cold Inside, Warm Glow, Skin Crawling, Hair Standing Up, Goosebumps, Shivering, Trembling, Steady, Grounded, Floating, Sinking, Drowning, Surfacing, Coming Up for Air
